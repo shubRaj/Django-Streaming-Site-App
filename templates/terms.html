@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Terms and Condition</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+
+	<!-- Link Swiper's CSS -->
+	<link rel="stylesheet" href="css/swiper.min.css">
+	<link rel="stylesheet" href="css/styles.css">
+
+	<script src="js/jquery-3.1.1.min.js"></script>
+	<script src="js/script.js"></script>
+
+
+	<!-- Demo styles -->
+	<style>
+
+
+
+	</style>
+</head>
+<body>
+	<div class="wrapper">
+
+		<header class="header">
+			<figure class="logo"><a href="index.html"><img src="img/logo.png" alt="Logo"></figure></a>
+			<nav class="menu">
+				<ul>
+					<li><a href="index.html">Home</a></li>
+					<li><a>Genres</a>
+						<ul>
+							<li><a href="genre.html">Action</a></li>
+							<li><a href="genre.html">Comedy</a></li>
+							<li><a href="genre.html">Drama</a></li>
+							<li><a href="genre.html">Romance</a></li>
+						</ul>
+					</li>
+					<li><a>Year</a>
+						<ul>
+							<li><a href="year.html">2017</a></li>
+							<li><a href="year.html">2016</a></li>
+							<li><a href="year.html">2015</a></li>
+							<li><a href="year.html">2014</a></li>
+						</ul>
+					</li>
+					<li><a>Language</a>
+						<ul>
+							<li><a href="language.html">English</a></li>
+							<li><a href="language.html">German</a></li>
+						</ul>
+					</li>
+					<li><a href="mostwatched.html">Most Watched</a></li>
+					<li class="mobsearch">
+						<form class="mobform">
+							<input type="text" name="s" class="mobsearchfield" placeholder="Search...">
+							<input type="submit" value="" class="mobsearchsubmit">
+						</form>
+					</li>
+				</ul>
+			</nav>
+			<form class="search">
+				<input type="text" name="s" class="searchfield" placeholder="Search...">
+				<input type="submit" value="" class="searchsubmit">
+			</form>
+
+			<div class="toggle"><img src="img/menu.svg"></div>
+		</header>
+		
+		<main class="content">
+			<section class="centered">
+				<h3>Terms and Conditions</h3>
+				<div class="textcontent">
+					<p>
+						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras auctor ante quis odio facilisis cursus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Curabitur mattis eu odio a finibus. Duis luctus, urna et pharetra dapibus, diam sapien porttitor nunc, id efficitur mi leo at urna. Praesent iaculis malesuada imperdiet. Pellentesque augue libero, rutrum et ex sed, convallis fringilla felis. Ut lacinia condimentum leo, nec suscipit lorem pellentesque vel. Curabitur cursus et leo ultrices tincidunt. Nam in posuere purus, quis lobortis ipsum. In sagittis nisi id nisi bibendum, eget sodales neque porttitor. Nullam dignissim tellus a sapien faucibus luctus vel nec diam. Donec pulvinar rutrum nulla, vitae lobortis massa imperdiet sit amet. In ullamcorper turpis ac risus placerat, in dignissim odio tristique.
+					</p>
+					<p>
+						Curabitur a velit mollis ipsum placerat vestibulum. Duis imperdiet gravida purus vitae laoreet. Praesent tincidunt tempus fringilla. Nullam ut odio magna. Nam ipsum mi, ullamcorper non metus lobortis, interdum accumsan ante. Cras nisi ex, tempus in volutpat et, tristique at erat. Nunc id imperdiet ex. Morbi luctus at ligula sit amet blandit. Curabitur ut dui nec purus posuere porttitor. Proin tincidunt nisi arcu, non interdum est finibus quis. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Cras vel ex at erat malesuada consectetur.
+					</p>
+					<p>
+						Proin justo augue, aliquet sagittis felis sit amet, commodo dictum ipsum. Vestibulum et tincidunt augue. Aenean libero dolor, blandit id cursus ut, iaculis nec purus. Nunc rhoncus pellentesque mi a molestie. In sit amet ultricies mi, vel convallis risus. Donec elementum eros vehicula velit aliquam accumsan. Sed pulvinar, dui eu suscipit ultrices, ligula odio suscipit elit, sed tincidunt enim massa a diam. In tincidunt elit facilisis nisi varius tristique. Sed semper rhoncus feugiat. Sed vestibulum ante scelerisque, blandit felis sed, pharetra felis. In dui augue, gravida sit amet leo non, rutrum porttitor turpis. Donec nec nunc consectetur, cursus enim nec, eleifend orci.
+					</p>
+				</div>
+			</div>
+		</section>
+
+	</main>
+
+	<footer class="footer">
+		<div class="copyright"><p>Copyright &copy 2017 www.focusoncode.com</p></div>
+		<div class="footermenu">
+			<ul>
+				<li><a href="index.html">Home</a></li>
+				<li><a href="contact.html">Contact</a></li>
+				<li><a href="terms.html">Terms and conditions</a></li>
+			</ul>
+		</div>
+		<div class="tags">
+			<ul>
+				<li>Watch Free Movies Trailers</li>
+				<li>Movie Trailers</li>
+				<li>English Subtitled Movies Trailers</li>
+				<li>Latest Movies Trailers</li>
+				<li>New Movies Trailers</li>
+
+			</ul>
+		</div>
+
+	</footer>
+
+	
+
+</div>
+</body>
+</html>

@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block extra_head %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+{% endblock extra_head %}
+{% block slider %}
+    		<!-- Swiper -->
+		<div class="homeslider">
+			<div class="swiper-container">
+
+				<div class="swiper-wrapper">
+                    {% for movie in recent %}
+                    
+                    <div class="swiper-slide">
+					<img src="{% static 'images/slider/poster1.jpg' %}" alt="{{movie.title}}-banner">
+				    <div class="caption">
+				        {% if request.user_agent.is_mobile %}
+				        	<div class="captioninside">
+							    <h4 style="color:#03A9F4;margin-bottom:10px;">{{movie.title | title}}</h4>
+							     <i class="fa fa-star" aria-hidden="true" style="    z-index: 9998;
+                                    color: #00C851;
+                                    margin-left:16%;
+                                    margin-bottom:8px;
+                                    font-size: 1rem;
+                                    transform: translateX(-50%)"> {{movie.rating|default_if_none:"0"}}/10</i>
+							     <p style="color:#f90;margin-bottom:10px;"><b>Release date:</b> {{movie.production|default_if_none:"unknown"}}</p>
+							     {% if movie.taglines %}
+							    <h5 style="color:#f90;margin-bottom:5px;"><b>Tagline:</b> {{movie.tagline | title}}</h5>
+							    {% else %}
+							    {% endif %}
+								<a href="" class="playbutton">Watch Now</a>
+							</div>
+				        {% else %}
+							<div class="captioninside">
+							    <h1 style="color:#03A9F4;margin-bottom:10px;">{{movie.title | title}}</h1>
+							    
+                                <i class="fa fa-star" aria-hidden="true" style="    z-index: 9998;
+                                    color: #00C851;
+                                    margin-left:57px;
+                                    margin-bottom:15px;
+                                    font-size: 2rem;
+                                    transform: translateX(-50%)"> {{movie.rating|default_if_none:"0"}}/10</i>
+							     <p style="color:#f90;margin-bottom:10px;"><b>Release date:</b> {{movie.production|default_if_none:"unknown"}}</p>
+							     {% if movie.taglines %}
+							    <h5 style="color:#f90;margin-bottom:5px;"><b>Tagline:</b> {{movie.tagline | title}}</h5>
+							    {% else %}
+							    {% endif %}
+							    <p style="color:#f90;margin-bottom:10px;"><b>Starring:</b> {% for cast in movie.movie_cast.all %}{{cast.name}} {% endfor %}</p>
+							    <p style="color:#f90;margin-bottom:10px;">
+							        <b>Language:</b> {{movie.language|title}}
+							    </p>
+								<a href="" class="playbutton">Watch Now</a>
+							</div>
+						{% endif %}
+						</div>
+					</div>
+
+                    {% endfor %}
+				</div>
+				<!-- Add Pagination -->
+				<div class="swiper-pagination"></div>
+			</div>
+		</div>
+{% endblock slider %}
+{% block content %}
+
+
+<section class="panel">
+    <h2>Featured</h2>
+    <div class="topslider">
+        <div class="swiper-container">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide"><a href="single.html"><img src="{% static 'images/9.jpg' %}" alt="{{movie.title}}-poster"><h3 class="hometitle">Space Betwen Us</h3></a></div>
+
+                <div class="swiper-slide"><a href="mostwatched.html"><img src="{% static 'img/others.png' %}"></a></div>
+            </div>
+            <div class="nextdirection most-next"><img src="{% static 'img/right-arrow.svg' %}"> </div>
+            <div class="leftdirection most-prev"><img src="{% static 'img/left-arrow.svg' %}"> </div>
+            <!-- Add Pagination -->
+        </div>
+    </div>
+</section>
+
+<section class="panel">
+    <h2>Recent</h2>
+    <div class="recentslider">
+        <div class="swiper-container">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide"><a href="single.html"><img src="{% static 'images/9.jpg' %}" alt="{{movie.title}}-poster"><h3 class="hometitle">Space Betwen Us</h3></a></div>
+
+                <div class="swiper-slide"><a href="mostwatched.html"><img src="{% static 'img/others.png' %}"></a></div>
+            </div>
+            <div class="nextdirection most-next"><img src="{% static 'img/right-arrow.svg' %}"> </div>
+            <div class="leftdirection most-prev"><img src="{% static 'img/left-arrow.svg' %}"> </div>
+            <!-- Add Pagination -->
+        </div>
+    </div>
+</section>
+
+<section class="panel">
+    <h2>Top Rated</h2>
+    <div class="topslider">
+        <div class="swiper-container">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide"><a href="single.html"><img src="{% static 'images/9.jpg' %}" alt="{{movie.title}}-poster"><h3 class="hometitle">Space Betwen Us</h3></a></div>
+
+                <div class="swiper-slide"><a href="mostwatched.html"><img src="{% static 'img/others.png' %}"></a></div>
+            </div>
+            <div class="nextdirection most-next"><img src="{% static 'img/right-arrow.svg' %}"> </div>
+            <div class="leftdirection most-prev"><img src="{% static 'img/left-arrow.svg' %}"> </div>
+            <!-- Add Pagination -->
+        </div>
+    </div>
+</section>
+{% endblock content %}
