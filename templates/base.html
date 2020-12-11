@@ -3,13 +3,13 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>{% block title %}{% endblock title %}</title>
+	<title>{% block title %}MoviesQuick{% endblock title %}</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
 
 	<!-- Link Swiper's CSS -->
 	<link rel="stylesheet" href="{% static 'css/swiper.min.css' %}">
 	<link rel="stylesheet" href="{% static 'css/styles.css' %}">
-
+	<link rel="icon" href="{% static 'img/favicon.png' %}" type="image/x-icon">
 	<script src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
 	<script src="{% static 'js/script.js' %}"></script>
 	{% block extra_head %}
@@ -22,7 +22,7 @@
 			<figure class="logo"><a href="{% url 'app_movies:movies_home' %}"><img src="{% static 'img/logo.png' %}" alt="Logo"></figure></a>
 			<nav class="menu">
 				<ul>
-					<li><a href="index.html">Home</a></li>
+					<li><a href="{% url 'app_movies:movies_home' %}">Home</a></li>
 					<li><a>Genres</a>
 						<ul>
 							<li><a href="genre.html">Action</a></li>
@@ -47,15 +47,15 @@
 					</li>
 					<li><a href="mostwatched.html">Most Watched</a></li>
 					<li class="mobsearch">
-						<form class="mobform">
-							<input type="text" name="s" class="mobsearchfield" placeholder="Search...">
+						<form class="mobform" method="get" action="{% url 'app_movies:search' %}">
+							<input type="text" name="query" style="color:white" class="mobsearchfield" placeholder="Search...">
 							<input type="submit" value="" class="mobsearchsubmit">
 						</form>
 					</li>
 				</ul>
 			</nav>
-			<form class="search">
-				<input type="text" name="s" class="searchfield" placeholder="Search...">
+			<form class="search" method="get" action="{% url 'app_movies:search' %}">
+				<input type="text" name="query"  style="color:white" class="searchfield" placeholder="Search...">
 				<input type="submit" value="" class="searchsubmit">
 			</form>
 

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Movie,Cast,Torrent,Magnet,WebTor,Embed,Download
+from .models import Movie,Cast,Torrent,Magnet,WebTor,Embed,Download,Comment
 class AdminMovie(admin.ModelAdmin):
     search_fields=["title","category"]
     list_display = ["title","category"]
@@ -10,6 +10,10 @@ class AdminCast(admin.ModelAdmin):
 class AdminTor(admin.ModelAdmin):
     search_fields = ["movie__title"]
     list_display = ["movie"]
+class AdminComment(admin.ModelAdmin):
+    search_fields = ["comment","movie__title","user__username"]
+    list_display = ["comment","movie","user"]
 admin.site.register([Torrent,Magnet,WebTor,Embed,Download],AdminTor)
+admin.site.register(Comment,AdminComment)
 admin.site.register(Cast,AdminCast)
 admin.site.register(Movie,AdminMovie)

@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %}Movies{% endblock title %}
+{% block content %}
+<section class="centered">
+    {% if movies %}
+    <h3>Movies</h3>
+    <div class="movies">
+        {% for movie in movies %}
+        <div class="mov">
+            <a href="{% url 'app_movies:movies_detail' movie.slug %}">
+                <img src="{{movie.poster.url}}" alt="{{movie.title}}-poster">
+                <h2 class="movietitle">{{movie.title|title}}</h2>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <h3 style="text-align: center;">No Result Found</h3>
+    <h3>We recommend you</h3>
+    <div class="movies">
+        {% for movie in recommended %}
+        <div class="mov">
+            <a href="{% url 'app_movies:movies_detail' movie.slug %}">
+                <img src="{{movie.poster.url}}" alt="{{movie.title}}-poster">
+                <h2 class="movietitle">{{movie.title|title}}</h2>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% if is_paginated %}
+        {% include 'pagination.html' with page_obj=page_obj Qparam=request.GET.query only %}
+    {% endif %}
+</section>
+{% endblock content %}

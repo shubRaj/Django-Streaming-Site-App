@@ -45,11 +45,19 @@
 							    <h5 style="color:#f90;margin-bottom:5px;"><b>Tagline:</b> {{movie.tagline | title}}</h5>
 							    {% else %}
 							    {% endif %}
-							    <p style="color:#f90;margin-bottom:10px;"><b>Starring:</b> {% for cast in movie.movie_cast.all %}{{cast.name}} {% endfor %}</p>
+                                <p style="color:#f90;margin-bottom:10px;"><b>Starring:</b> 
+                                    {% for cast in movie.movie_cast.all %}
+                                        {% if forloop.last %}
+                                            {{cast.name}} 
+                                        {% else %}
+                                            {{cast.name}},
+                                        {% endif %}
+                                    {% endfor %}
+                                </p>
 							    <p style="color:#f90;margin-bottom:10px;">
 							        <b>Language:</b> {{movie.language|title}}
 							    </p>
-								<a href="" class="playbutton">Watch Now</a>
+								<a href="{% url 'app_movies:movies_detail' movie.slug %}" class="playbutton">Watch Now</a>
 							</div>
 						{% endif %}
 						</div>
@@ -64,14 +72,15 @@
 {% endblock slider %}
 {% block content %}
 
-
+{% if featured %}
 <section class="panel">
     <h2>Featured</h2>
     <div class="topslider">
         <div class="swiper-container">
             <div class="swiper-wrapper">
-                <div class="swiper-slide"><a href="single.html"><img src="{% static 'images/9.jpg' %}" alt="{{movie.title}}-poster"><h3 class="hometitle">Space Betwen Us</h3></a></div>
-
+                {% for movie in featured %}
+                <div class="swiper-slide"><a href="{% url 'app_movies:movies_detail' movie.slug %}"><img src="{% static 'images/9.jpg' %}" alt="{{movie.title}}-poster"><h3 class="hometitle">{{movie.title}}</h3></a></div>
+                {% endfor %}
                 <div class="swiper-slide"><a href="mostwatched.html"><img src="{% static 'img/others.png' %}"></a></div>
             </div>
             <div class="nextdirection most-next"><img src="{% static 'img/right-arrow.svg' %}"> </div>
@@ -80,14 +89,16 @@
         </div>
     </div>
 </section>
-
+{% endif %}
+{% if recent %}
 <section class="panel">
     <h2>Recent</h2>
     <div class="recentslider">
         <div class="swiper-container">
             <div class="swiper-wrapper">
-                <div class="swiper-slide"><a href="single.html"><img src="{% static 'images/9.jpg' %}" alt="{{movie.title}}-poster"><h3 class="hometitle">Space Betwen Us</h3></a></div>
-
+                {% for movie in recent %}
+                <div class="swiper-slide"><a href="{% url 'app_movies:movies_detail' movie.slug %}"><img src="{% static 'images/9.jpg' %}" alt="{{movie.title}}-poster"><h3 class="hometitle">{{movie.title}}</h3></a></div>
+                {% endfor %}
                 <div class="swiper-slide"><a href="mostwatched.html"><img src="{% static 'img/others.png' %}"></a></div>
             </div>
             <div class="nextdirection most-next"><img src="{% static 'img/right-arrow.svg' %}"> </div>
@@ -96,14 +107,16 @@
         </div>
     </div>
 </section>
-
+{% endif %}
+{% if mostwatched %}
 <section class="panel">
-    <h2>Top Rated</h2>
+    <h2>Trending Today</h2>
     <div class="topslider">
         <div class="swiper-container">
             <div class="swiper-wrapper">
-                <div class="swiper-slide"><a href="single.html"><img src="{% static 'images/9.jpg' %}" alt="{{movie.title}}-poster"><h3 class="hometitle">Space Betwen Us</h3></a></div>
-
+                {% for movie in mostwatched %}
+                <div class="swiper-slide"><a href="{% url 'app_movies:movies_detail' movie.slug %}"><img src="{% static 'images/9.jpg' %}" alt="{{movie.title}}-poster"><h3 class="hometitle">{{movie.title}}</h3></a></div>
+                {% endfor %}
                 <div class="swiper-slide"><a href="mostwatched.html"><img src="{% static 'img/others.png' %}"></a></div>
             </div>
             <div class="nextdirection most-next"><img src="{% static 'img/right-arrow.svg' %}"> </div>
@@ -112,4 +125,5 @@
         </div>
     </div>
 </section>
+{% endif %}
 {% endblock content %}

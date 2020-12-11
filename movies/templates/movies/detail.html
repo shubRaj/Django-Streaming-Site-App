@@ -1,71 +1,107 @@
 {% extends 'base.html' %}
+{%  load static %}
 {% block content %}
-    <div class="single">
+<div class="single">
 
-        <section class="trailer">
-            <h3>Trailer</h3>
-            <div class="trailer_frame">
-                <iframe width="560" height="315" src="https://www.youtube.com/embed/x73-573aWfs" frameborder="0" allowfullscreen></iframe>
-            </div>
-        </section>
+    <section class="trailer">
+        <h3 style="text-align: center;">{{movie.title|title}}</h3>
+        <div class="trailer_frame">
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/x73-573aWfs" frameborder="0"
+                allowfullscreen></iframe>
+        </div>
+    </section>
 
-        <section class="movie">
-            <img src="images/9.jpg">
-            <ul>
-                <li>Space Between Us</li>
-                <li>The first human born on Mars travels to Earth for the first time, experiencing the wonders of the planet through fresh eyes. He embarks on an adventure with a street smart girl to discover how he came to be.</li>
-                <li><a href="genre.html">Adventure</a>, <a href="genre.html">Drama</a>, <a href="genre.html">Romance</a></li>
-                <li><a href="cast.html">Gary Oldman</a>, <a href="cast.html">Asa Butterfield</a></li>
-                <li>{{movie.views}} Views</li>
-            </ul>
-        </section>
-        <section class="links">
-            <h3>Links</h3>
-            <ul class="dlinks">
-                <li><a>Download</a></li>
-                <li><a href="#">Link1</a></li>
-                <li><a href="#">Link2</a></li>
-                <li><a href="#">Link3</a></li>
-            </ul>
-            <ul class="wlinks">
-                <li><a>Watch</a></li>
-                <li><a href="#">Link1</a></li>
-                <li><a href="#">Link2</a></li>
-                <li><a href="#">Link3</a></li>
-            </ul>
-        </section>
+    <section class="movie">
+        <img src="{{movie.poster.url}}" alt="{{movie.title}}-poster">
+        <ul>
+            <li>{{movie.title|title}}</li>
+            <li style="color:#f90;margin-bottom:10px;"><b>Original Language{{movie.language|pluralize}}:</b>
+                {{movie.language|title}}</li>
+            <li>{{movie.description|title}}</li>
+            <li>
+                Genre:
+                {% for category in movie.category %}
+                {% if category == movie.category|last %}
+                <a href="genre.html">{{category|title}}</a>
+                {% else %}
+                <a href="genre.html">{{category|title}}</a>,
+                {% endif %}
+                {% endfor %}
+            </li>
+            <li>
+                Starring:
+                {% for cast in movie.movie_cast.all %}
+                {% if forloop.last %}
+                <a href="cast.html">{{cast.name}}</a>
+                {% else %}
+                <a href="cast.html">{{cast.name}}</a>,
+                {% endif %}
+                {% endfor %}
+            </li>
+            <li>{{movie.views}} View{{movie.views|pluralize}}</li>
+        </ul>
+    </section>
+    <section class="links">
+        <h3>Links</h3>
 
-        <section class="related">
-            <h3>Related movies</h3>
-            <div class="relatemovie">
-                <a href="#"><img src="images/2.jpg"></a>
-                <a href="#"><span class="relatedname">John Wick</span></a>
-            </div>
-            <div class="relatemovie">
-                <a href="#"><img src="images/3.jpg"></a>
-                <a href="#"><span class="relatedname">Spider Man Homecoming</span></a>
-            </div>
-            <div class="relatemovie">
-                <a href="#"><img src="images/4.jpg"></a>
-                <a href="#"><span class="relatedname">Beauty and Beast</span></a>
-            </div>
-            <div class="relatemovie">
-                <a href="#"><img src="images/5.jpg"></a>
-                <a href="#"><span class="relatedname">Pirates of the Caribbean: Dead Men Tell No Tales</span></a>
-            </div>
-            <div class="relatemovie">
-                <a href="#"><img src="images/6.jpg"></a>
-                <a href="#"><span class="relatedname">Fifty Shades Darker</span></a>
-            </div>
-            <div class="relatemovie">
-                <a href="#"><img src="images/7.jpg"></a>
-                <a href="#"><span class="relatedname">Transformers</span></a>
-            </div>
+        {% with embeds=movie.movie_embed.all %}
+        {% if embeds %}
+        <ul class="wlinks">
+            <li><a>Watch:</a></li>
+            {% for embed in embeds %}
+                <li><a href="{{embed.link}}">{{embed.quality}}</a></li>
+            {% endfor %}
+            <li><a href="{{movie.trailer}}">Watch Trailer</a></li>
+        </ul>
+        {% endif %}
+        {% endwith %}
 
-        </section>
+        {% with downloads=movie.movie_download.all %}
+        {% if downloads %}
+        <ul class="dlinks">
+            <li><a>Download:</a></li>
+            {% for download in downloads %}
+                <li><a href="{{download.link}}" download>{{download.quality}}</a></li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
 
-        <section class="comments">
-            <h3>Comments</h3>
-        </section>
-    </div>
+        {% with magnets=movie.movie_magnet.all %}
+        {% if magnets %}
+        <ul class="wlinks">
+            <li><a>Magnet:</a></li>
+            {% for magnet in magnets %}
+                <li><a href="{{magnet.link}}">{{magnet.quality}}</a></li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
+
+        {% with torrents=movie.movie_torrent.all %}
+        {% if torrents %}
+        <ul class="wlinks">
+            <li><a>Torrent:</a></li>
+            {% for torrent in torrents %}
+                <li><a href="{{torrent.link}}" download>{{torrent.quality}}</a></li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
+    </section>
+
+    <section class="related">
+        <h3>Related movies</h3>
+        {% for related_movie in related_movies %}
+        <div class="relatemovie">
+            <a href="#"><img src="{% static 'images/2.jpg' %}"></a>
+            <a href="#"><span class="relatedname">{{related_movie.title}}</span></a>
+        </div>
+        {% endfor %}
+    </section>
+
+    <section class="comments">
+        <h3>Comments</h3>
+    </section>
+</div>
 {% endblock content %}

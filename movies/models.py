@@ -3,6 +3,7 @@ from django.utils import timezone
 from django.utils.text import slugify
 from multiselectfield import MultiSelectField
 from django.core.validators import MaxValueValidator
+from django.contrib.auth.models import User
 CATEGORY_CHOICES = (
     ("action","ACTION"),
     ("drama","DRAMA"),
@@ -46,7 +47,7 @@ class Movie(models.Model):
     download= models.URLField(blank=True,null=True)
     views = models.IntegerField(default=0)
     slug = models.SlugField(blank=True,max_length=283)
-    production = models.DateField(null=True)
+    production = models.DateField(null=True,blank=True)
     uploaded_on = models.DateTimeField(default=timezone.now,editable=False)
     def __str__(self):
         return f"{self.title}"
@@ -68,6 +69,7 @@ class Torrent(TorAbs):
     movie = models.ForeignKey(Movie,on_delete=models.CASCADE,related_name="movie_torrent")
 class Magnet(TorAbs):
     movie = models.ForeignKey(Movie,on_delete=models.CASCADE,related_name="movie_magnet")
+    link = models.CharField(max_length=2083)
 class WebTor(models.Model):
     movie = models.ForeignKey(Movie,on_delete=models.CASCADE,related_name="movie_webtor")
     quality = TorAbs._meta.get_field("quality")
@@ -78,3 +80,12 @@ class Embed(TorAbs):
     movie = models.ForeignKey(Movie,on_delete=models.CASCADE,related_name="movie_embed")
 class Download(TorAbs):
     movie = models.ForeignKey(Movie,on_delete=models.CASCADE,related_name="movie_download")
+class Comment(models.Model):
+    user = models.ForeignKey(User,on_delete=models.CASCADE,related_name="user_comment",null=True,blank=True)
+    movie = models.ForeignKey(Movie,on_delete=models.CASCADE,related_name="movie_comment",null=True)
+    comment = models.TextField()
+    created_on = models.DateTimeField(default=timezone.now,editable=False)
+    def __str__(self):
+        return self.comment
+    class Meta:
+        ordering=["-created_on"]
