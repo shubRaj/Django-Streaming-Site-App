@@ -1,119 +1,106 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="utf-8">
-	<title>Contact</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+{% extends 'base.html' %}
+{% load static %}
+{% block extra_head %}
+<link rel="stylesheet" type="text/css" href="{% static 'contactformStatic/css/main.css' %} ">
+<link rel="stylesheet" type="text/css" href="{% static 'contactformStatic/css/util.css' %} ">
+<link rel="stylesheet" type="text/css"
+  href="{% static 'contactformStatic/fonts/font-awesome-4.7.0/css/font-awesome.min.css' %}">
+<link rel="stylesheet" type="text/css"
+  href="{% static 'contactformStatic/fonts/font-awesome-4.7.0/css/font-awesome.min.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'contactformStatic/vendor/animate/animate.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'contactformStatic/vendor/css-hamburgers/hamburgers.min.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'contactformStatic/vendor/animsition/css/animsition.min.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'contactformStatic/vendor/select2/select2.min.css' %}">
+<link rel="stylesheet" type="text/css"
+  href="{% static 'contactformStatic/vendor/daterangepicker/daterangepicker.css' %}">
+<script src="https://www.google.com/recaptcha/api.js"></script>
+<!--Script for recaptcha-->
+<script>
+  window.onload = function () {
+    var recaptcha = document.forms["myForm"]["g-recaptcha-response"];
+    recaptcha.required = true;
+    recaptcha.oninvalid = function (e) {
+      // do something
+      alert("Please complete the captcha");
+    }
+  }
+</script>
+<style>
+  @media screen and (max-width: 992px) {
+  .wrap-contact100{
+    width:365px;
+  }
+}
+</style>
+{% endblock extra_head %}
+{% block content %}
+<div class="single">
+  {% if messages %}
+  {% for message in messages %}
+  {% if message.level_tag == 'error' %}
+    <p style="text-align:center;color:red;">{{message.message}}</p>
+  {% elif message.level_tag == 'success' %}
+  <p style="text-align:center;color:green;">{{message.message}}</p>
+  {% endif %}
+  {% endfor %}
+  {% endif %}
+  <center>
+    <div class="wrap-contact100" align="left">
+      <form class="contact100-form validate-form" method="post" name="myForm">
+        {% csrf_token %}
+        <span class="contact100-form-title">
+          Contact Us
+        </span>
 
-	<!-- Link Swiper's CSS -->
-	<link rel="stylesheet" href="css/swiper.min.css">
-	<link rel="stylesheet" href="css/styles.css">
+        <div class="wrap-input100 validate-input" data-validate="Name is required">
+          <span class="label-input100">Your Name</span>
+          <input class="input100" type="text" name="name" placeholder="Enter your name">
+          <span class="focus-input100"></span>
+        </div>
 
-	<script src="js/jquery-3.1.1.min.js"></script>
-	<script src="js/script.js"></script>
+        <div class="wrap-input100 validate-input" data-validate="Valid email is required: abc@moviesquick.net">
+          <span class="label-input100">Email</span>
+          <input class="input100" type="text" name="email" placeholder="Enter your email addess">
+          <span class="focus-input100"></span>
+        </div>
 
-
-	<!-- Demo styles -->
-	<style>
-
-
-
-	</style>
-</head>
-<body>
-	<div class="wrapper">
-
-		<header class="header">
-			<figure class="logo"><a href="index.html"><img src="img/logo.png" alt="Logo"></figure></a>
-			<nav class="menu">
-				<ul>
-					<li><a href="index.html">Home</a></li>
-					<li><a>Genres</a>
-						<ul>
-							<li><a href="genre.html">Action</a></li>
-							<li><a href="genre.html">Comedy</a></li>
-							<li><a href="genre.html">Drama</a></li>
-							<li><a href="genre.html">Romance</a></li>
-						</ul>
-					</li>
-					<li><a>Year</a>
-						<ul>
-							<li><a href="year.html">2017</a></li>
-							<li><a href="year.html">2016</a></li>
-							<li><a href="year.html">2015</a></li>
-							<li><a href="year.html">2014</a></li>
-						</ul>
-					</li>
-					<li><a>Language</a>
-						<ul>
-							<li><a href="language.html">English</a></li>
-							<li><a href="language.html">German</a></li>
-						</ul>
-					</li>
-					<li><a href="mostwatched.html">Most Watched</a></li>
-					<li class="mobsearch">
-						<form class="mobform">
-							<input type="text" name="s" class="mobsearchfield" placeholder="Search...">
-							<input type="submit" value="" class="mobsearchsubmit">
-						</form>
-					</li>
-				</ul>
-			</nav>
-			<form class="search">
-				<input type="text" name="s" class="searchfield" placeholder="Search...">
-				<input type="submit" value="" class="searchsubmit">
-			</form>
-
-			<div class="toggle"><img src="img/menu.svg"></div>
-		</header>
-		
-		<main class="content">
-			<section class="centered">
-				<h3>Contact</h3>
-				<div class="contact">
-					<form id="myForm" action="#" method="POST">
-						<label for="name">Name:</label>
-						<input type="text" name="name" id="name">
-
-						<label for="email">Email:</label>
-						<input type="text" name="email" id="email">
-
-						<label for="message">Message:</label>
-						<textarea id="message" name="message"></textarea>
-
-						<input type="submit" name="submit" value="SEND">
-					</form>
-
-					<span class="success">Message sent succesfully</span>
-					<span class="error">Failed sending message</span>
-				</div>
-			</div>
-		</section>
-
-	</main>
-
-	<footer class="footer">
-		<div class="copyright"><p>Copyright &copy 2017 www.focusoncode.com</p></div>
-		<div class="footermenu">
-			<ul>
-				<li><a href="index.html">Home</a></li>
-				<li><a href="contact.html">Contact</a></li>
-				<li><a href="terms.html">Terms and conditions</a></li>
-			</ul>
-		</div>
-		<div class="tags">
-			<ul>
-				<li>Watch Free Movies Trailers</li>
-				<li>Movie Trailers</li>
-				<li>English Subtitled Movies Trailers</li>
-				<li>Latest Movies Trailers</li>
-				<li>New Movies Trailers</li>
-
-			</ul>
-		</div>
-
-	</footer>
-	
+        <div class="wrap-input100 input100-select">
+          <span class="label-input100">Contact Regarding</span>
+          <div>
+            <select class="selection-2" name="service">
+              <option>General Infomations</option>
+              <option>Login Problems</option>
+              <option>Fake Movies</option>
+              <option>Advertising</option>
+              <option>Donation</option>
+            </select>
+          </div>
+          <span class="focus-input100"></span>
+        </div>
+        <div class="wrap-input100 validate-input" data-validate="Message is required">
+          <span class="label-input100">Message</span>
+          <textarea class="input100" name="message" placeholder="Your message here..."></textarea>
+          <span class="focus-input100"></span>
+        </div>
+        <div class="wrap-input100 validate-input" data-validate="Name is required">
+          <span class="label-input100">Human Verification</span>
+          <div class="g-recaptcha" data-sitekey="6LdNImQUAAAAAIsQosHCvAID4ZbqZFRaoukT9UL0" required></div>
+          <span class="focus-input100"></span>
+        </div>
+        <div class="container-contact100-form-btn">
+          <div class="wrap-contact100-form-btn">
+            <div class="contact100-form-bgbtn"></div>
+            <button class="contact100-form-btn">
+              <span>
+                Submit
+                <i class="fa fa-long-arrow-right m-l-7" aria-hidden="true"></i>
+              </span>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
 </div>
-</body>
-</html>
+{% endblock content %}
+{% block extra_script %}
+{% endblock extra_script %}

@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+    <section class="centered">
+        <h3>Terms and Conditions</h3>
+        <div class="textcontent">
+            {% for term in terms %}
+            <p>
+                {{term.paragraph}}
+            </p>
+            {% empty %}
+            <p>
+                Work On Progress
+            </p>
+            {% endfor %}
+        </div>
+    </div>
+    </section>
+{% endblock content %}

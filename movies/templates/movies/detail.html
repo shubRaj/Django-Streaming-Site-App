@@ -1,13 +1,15 @@
 {% extends 'base.html' %}
-{%  load static %}
+{% load static %}
 {% block content %}
 <div class="single">
 
     <section class="trailer">
         <h3 style="text-align: center;">{{movie.title|title}}</h3>
         <div class="trailer_frame">
-            <iframe width="560" height="315" src="https://www.youtube.com/embed/x73-573aWfs" frameborder="0"
-                allowfullscreen></iframe>
+            <div id="player" class="webtor">
+                
+            </div>
+
         </div>
     </section>
 
@@ -49,7 +51,7 @@
         <ul class="wlinks">
             <li><a>Watch:</a></li>
             {% for embed in embeds %}
-                <li><a href="{{embed.link}}">{{embed.quality}}</a></li>
+            <li><a href="{{embed.link}}">{{embed.quality}}</a></li>
             {% endfor %}
             <li><a href="{{movie.trailer}}">Watch Trailer</a></li>
         </ul>
@@ -61,7 +63,7 @@
         <ul class="dlinks">
             <li><a>Download:</a></li>
             {% for download in downloads %}
-                <li><a href="{{download.link}}" download>{{download.quality}}</a></li>
+            <li><a href="{{download.link}}" download>{{download.quality}}</a></li>
             {% endfor %}
         </ul>
         {% endif %}
@@ -72,7 +74,7 @@
         <ul class="wlinks">
             <li><a>Magnet:</a></li>
             {% for magnet in magnets %}
-                <li><a href="{{magnet.link}}">{{magnet.quality}}</a></li>
+            <li><a href="{{magnet.link}}">{{magnet.quality}}</a></li>
             {% endfor %}
         </ul>
         {% endif %}
@@ -83,7 +85,7 @@
         <ul class="wlinks">
             <li><a>Torrent:</a></li>
             {% for torrent in torrents %}
-                <li><a href="{{torrent.link}}" download>{{torrent.quality}}</a></li>
+            <li><a href="{{torrent.link}}" download>{{torrent.quality}}</a></li>
             {% endfor %}
         </ul>
         {% endif %}
@@ -94,14 +96,57 @@
         <h3>Related movies</h3>
         {% for related_movie in related_movies %}
         <div class="relatemovie">
-            <a href="#"><img src="{% static 'images/2.jpg' %}"></a>
-            <a href="#"><span class="relatedname">{{related_movie.title}}</span></a>
+            <a href="{% url 'app_movies:movies_detail' related_movie.slug %}"><img src="{{related_movie.poster.url}}"></a>
+            <a href="{% url 'app_movies:movies_detail' related_movie.slug %}"><span class="relatedname">{{related_movie.title}}</span></a>
         </div>
         {% endfor %}
     </section>
 
     <section class="comments">
         <h3>Comments</h3>
+        <div id="disqus_thread"></div>
+        <script>
+            var disqus_config = function () {
+                this.page.url = "{{request.get_full_path}}/";
+                this.page.identifier = "{{movie.slug}}";
+            };
+
+            (function () { // DON'T EDIT BELOW THIS LINE
+                var d = document, s = d.createElement('script');
+                s.src = 'https://moviesquick.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
     </section>
 </div>
 {% endblock content %}
+{% block extra_footer %}
+{% if movie.movie_tag.all %}
+    <ul>
+        {% for tag in movie.movie_tag.all %}
+        {% if "footer" in tag.portion %}
+        <li>{{tag.tag}}</li>
+        {% endif %}
+        {% endfor %}
+    </ul>
+{% endif %}
+{% endblock extra_footer %}
+{% block extra_script %}
+<script>
+    window.webtor = window.webtor || [];
+    window.webtor.push({
+        id: 'player',
+        magnet: '{{movie.movie_magnet.first.link}}',
+        poster: 'http://localhost:8000/media/poster/None-poster.jpg',
+        i18n: {
+            en: {
+                common: {
+                    "prepare to play": "Preparing Video File Please Wait",
+                },
+            },
+        },
+    });
+</script>
+<script src="{% static 'torrent/moviesquickTor.js' %}" charset="utf-8"></script>
+{% endblock extra_script %}

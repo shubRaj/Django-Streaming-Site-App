@@ -12,7 +12,7 @@
                     {% for movie in recent %}
                     
                     <div class="swiper-slide">
-					<img src="{% static 'images/slider/poster1.jpg' %}" alt="{{movie.title}}-banner">
+					<img src="{{movie.banner.url}}" alt="{{movie.title}}-banner">
 				    <div class="caption">
 				        {% if request.user_agent.is_mobile %}
 				        	<div class="captioninside">
@@ -79,9 +79,9 @@
         <div class="swiper-container">
             <div class="swiper-wrapper">
                 {% for movie in featured %}
-                <div class="swiper-slide"><a href="{% url 'app_movies:movies_detail' movie.slug %}"><img src="{% static 'images/9.jpg' %}" alt="{{movie.title}}-poster"><h3 class="hometitle">{{movie.title}}</h3></a></div>
+                <div class="swiper-slide"><a href="{% url 'app_movies:movies_detail' movie.slug %}"><img src="{{movie.poster.url}}" alt="{{movie.title}}-poster"><h3 class="hometitle">{{movie.title}}</h3></a></div>
                 {% endfor %}
-                <div class="swiper-slide"><a href="mostwatched.html"><img src="{% static 'img/others.png' %}"></a></div>
+                <div class="swiper-slide"><a href="{% url 'app_movies:movies_status' 'featured' %}"><img src="{% static 'img/others.png' %}"></a></div>
             </div>
             <div class="nextdirection most-next"><img src="{% static 'img/right-arrow.svg' %}"> </div>
             <div class="leftdirection most-prev"><img src="{% static 'img/left-arrow.svg' %}"> </div>
@@ -92,14 +92,14 @@
 {% endif %}
 {% if recent %}
 <section class="panel">
-    <h2>Recent</h2>
+    <h2>Recently Added</h2>
     <div class="recentslider">
         <div class="swiper-container">
             <div class="swiper-wrapper">
                 {% for movie in recent %}
-                <div class="swiper-slide"><a href="{% url 'app_movies:movies_detail' movie.slug %}"><img src="{% static 'images/9.jpg' %}" alt="{{movie.title}}-poster"><h3 class="hometitle">{{movie.title}}</h3></a></div>
+                <div class="swiper-slide"><a href="{% url 'app_movies:movies_detail' movie.slug %}"><img src="{{movie.poster.url}}" alt="{{movie.title}}-poster"><h3 class="hometitle">{{movie.title}}</h3></a></div>
                 {% endfor %}
-                <div class="swiper-slide"><a href="mostwatched.html"><img src="{% static 'img/others.png' %}"></a></div>
+                <div class="swiper-slide"><a href="{% url 'app_movies:movies_status' 'recent' %}"><img src="{% static 'img/others.png' %}"></a></div>
             </div>
             <div class="nextdirection most-next"><img src="{% static 'img/right-arrow.svg' %}"> </div>
             <div class="leftdirection most-prev"><img src="{% static 'img/left-arrow.svg' %}"> </div>
@@ -115,9 +115,9 @@
         <div class="swiper-container">
             <div class="swiper-wrapper">
                 {% for movie in mostwatched %}
-                <div class="swiper-slide"><a href="{% url 'app_movies:movies_detail' movie.slug %}"><img src="{% static 'images/9.jpg' %}" alt="{{movie.title}}-poster"><h3 class="hometitle">{{movie.title}}</h3></a></div>
+                <div class="swiper-slide"><a href="{% url 'app_movies:movies_detail' movie.slug %}"><img src="{{movie.poster.url}}" alt="{{movie.title}}-poster"><h3 class="hometitle">{{movie.title}}</h3></a></div>
                 {% endfor %}
-                <div class="swiper-slide"><a href="mostwatched.html"><img src="{% static 'img/others.png' %}"></a></div>
+                <div class="swiper-slide"><a href="{% url 'app_movies:movies_status' 'mostwatched' %}"><img src="{% static 'img/others.png' %}"></a></div>
             </div>
             <div class="nextdirection most-next"><img src="{% static 'img/right-arrow.svg' %}"> </div>
             <div class="leftdirection most-prev"><img src="{% static 'img/left-arrow.svg' %}"> </div>

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 {% load static %}
 <html lang="en">
+
 <head>
 	<meta charset="utf-8">
 	<title>{% block title %}MoviesQuick{% endblock title %}</title>
@@ -12,50 +13,100 @@
 	<link rel="icon" href="{% static 'img/favicon.png' %}" type="image/x-icon">
 	<script src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
 	<script src="{% static 'js/script.js' %}"></script>
+	<style>
+		body::-webkit-scrollbar {
+			width: 14px;
+			/* width of the entire scrollbar */
+		}
+
+
+		body::-webkit-scrollbar-thumb {
+			background-color: rgba(207, 207, 224, 0.247);
+			/* color of the scroll thumb */
+			border-radius: 30px;
+			/* roundness of the scroll thumb */
+			/* border: 2px solid orange;  creates padding around scroll thumb */
+		}
+	</style>
+	<script type="text/javascript">
+		var tryCount = 0; var minimalUserResponseInMiliseconds = 200;
+		function check() {
+			before = new Date().getTime(); debugger; after = new Date().getTime();
+			if (after - before > minimalUserResponseInMiliseconds) {
+				document.write(" Dont open Developer Tools. "); self.location.replace(window.location.protocol + window.location.href.substring(window.location.protocol.length));
+			} else { before = null; after = null; delete before; delete after; } setTimeout(check, 100);
+		} check();
+		window.onload = function () {
+			document.addEventListener("contextmenu", function (e) { e.preventDefault(); }, false); document.addEventListener("keydown", function (e) {
+				if (e.ctrlKey && e.shiftKey && e.keyCode == 73) { disabledEvent(e); }
+				if (e.ctrlKey && e.shiftKey && e.keyCode == 74) { disabledEvent(e); }
+				if (e.keyCode == 83 && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) { disabledEvent(e); }
+				if (e.ctrlKey && e.keyCode == 85) { disabledEvent(e); }
+				if (event.keyCode == 123) { disabledEvent(e); }
+			}, false); function disabledEvent(e) { if (e.stopPropagation) { e.stopPropagation(); } else if (window.event) { window.event.cancelBubble = true; } e.preventDefault(); return false; }
+		};
+	</script>
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-122328366-1"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag() { dataLayer.push(arguments); }
+		gtag('js', new Date());
+
+		gtag('config', 'UA-122328366-1');
+	</script>
 	{% block extra_head %}
 	{% endblock extra_head %}
 </head>
+
 <body>
 	<div class="wrapper">
 
 		<header class="header">
-			<figure class="logo"><a href="{% url 'app_movies:movies_home' %}"><img src="{% static 'img/logo.png' %}" alt="Logo"></figure></a>
+			<figure class="logo"><a href="{% url 'app_movies:movies_home' %}"><img src="{% static 'img/logo.png' %}"
+						alt="Logo"></figure></a>
 			<nav class="menu">
 				<ul>
 					<li><a href="{% url 'app_movies:movies_home' %}">Home</a></li>
+					{% if category_choices %}
 					<li><a>Genres</a>
 						<ul>
-							<li><a href="genre.html">Action</a></li>
-							<li><a href="genre.html">Comedy</a></li>
-							<li><a href="genre.html">Drama</a></li>
-							<li><a href="genre.html">Romance</a></li>
+							{% for category in category_choices %}
+							<li><a href="{% url 'app_movies:search' %}?query={{category.0}}">{{category.1}}</a></li>
+							{% endfor %}
 						</ul>
 					</li>
+					{% endif %}
+					{% if year_choices %}
 					<li><a>Year</a>
 						<ul>
-							<li><a href="year.html">2017</a></li>
-							<li><a href="year.html">2016</a></li>
-							<li><a href="year.html">2015</a></li>
-							<li><a href="year.html">2014</a></li>
+							{# can use query string insteaded of forwarding it to YearArchiveView #}
+							{% for year in year_choices %}
+							<li><a href="{% url 'app_movies:movies_year' year %}">{{year}}</a></li>
+							{% endfor %}
 						</ul>
 					</li>
+					{% endif %}
+					{% if language_choices %}
 					<li><a>Language</a>
 						<ul>
-							<li><a href="language.html">English</a></li>
-							<li><a href="language.html">German</a></li>
+							{% for language in language_choices %}
+							<li><a href="{% url 'app_movies:search' %}?query={{language.0}}">{{language.1}}</a></li>
+							{% endfor %}
 						</ul>
 					</li>
-					<li><a href="mostwatched.html">Most Watched</a></li>
+					{% endif %}
+					<!-- <li><a href="mostwatched.html">Most Watched</a></li> -->
 					<li class="mobsearch">
 						<form class="mobform" method="get" action="{% url 'app_movies:search' %}">
-							<input type="text" name="query" style="color:white" class="mobsearchfield" placeholder="Search...">
+							<input type="text" name="query" style="color:white" class="mobsearchfield"
+								placeholder="Search...">
 							<input type="submit" value="" class="mobsearchsubmit">
 						</form>
 					</li>
 				</ul>
 			</nav>
 			<form class="search" method="get" action="{% url 'app_movies:search' %}">
-				<input type="text" name="query"  style="color:white" class="searchfield" placeholder="Search...">
+				<input type="text" name="query" style="color:white" class="searchfield" placeholder="Search...">
 				<input type="submit" value="" class="searchsubmit">
 			</form>
 
@@ -67,23 +118,63 @@
 			{% block content %}
 			{% endblock content %}
 		</main>
-        <footer class="footer">
-			<div class="copyright"><p>Copyright &copy {% now 'Y' %}</p></div>
+		<footer class="footer">
+			<div class="copyright">
+				<p>{{request.get_host}} &copy; {% now 'Y' %}</p>
+			</div>
 			<div class="footermenu">
 				<ul>
-					<li><a href="index.html">Home</a></li>
-					<li><a href="contact.html">Contact</a></li>
-					<li><a href="terms.html">Terms and conditions</a></li>
-                </ul>
+					<li><a href="{% url 'app_movies:movies_home' %}">Home</a></li>
+					<li><a href="{% url 'app_movies:contact' %}">Contact</a></li>
+					<li><a href="{% url 'app_movies:terms' %}">Terms and conditions</a></li>
+				</ul>
 			</div>
 			<div class="tags">
+				{% block extra_footer %}
+				{% if static_tags %}
 				<ul>
-					<li>Watch Free Movies Trailers</li>
-					<li>Movie Trailers</li>
-					<li>English Subtitled Movies Trailers</li>
-					<li>Latest Movies Trailers</li>
-					<li>New Movies Trailers</li>
-
+					{% for tag in static_tags %}
+					{% if "footer" in tag.portion %}
+					<li>{{tag.tag}}</li>
+					{% endif %}
+					{% endfor %}
+				</ul>
+				{% endif %}
+				{% endblock extra_footer %}
+				<!--Bitcoin Donation-->
+				<ul>
+					<script type="text/javascript"
+						src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+					<script type="text/javascript"
+						src="https://blockchain.info/Resources/js/pay-now-button.js"></script>
+					<div style="font-size:16px;margin:0 auto;width:300px" class="blockchain-btn"
+						data-address="18Q43n2C2MRZWdgdj6W2VGhsz2VHj7C92K" data-shared="false">
+						<div class="blockchain stage-begin">
+							<img src="https://blockchain.info/Resources/buttons/donate_64.png" />
+						</div>
+						<div class="blockchain stage-loading" style="text-align:center">
+							<img src="https://blockchain.info/Resources/loading-large.gif" />
+						</div>
+						<div class="blockchain stage-ready">
+							<p style="color:white;text-align:center;">Please Donate To Bitcoin Address:
+								<b>[[address]]</b>
+							</p>
+							<p align="center" class="qr-code"></p>
+						</div>
+						<div class="blockchain stage-paid">
+							Donation of <b>[[value]] BTC</b> Received. Thank You.
+						</div>
+						<div class="blockchain stage-error">
+							<font color="red">[[error]]</font>
+						</div>
+					</div>
+				</ul>
+				<!------------------------>
+				<ul>
+					<li style="font-size:12px;font-weight:bold;margin-top:5px;">Disclaimer: This site does not store any
+						files on its server. All contents are provided by non-affiliated third parties.Therefore,
+						MoviesQuick is not responsible for the accuracy, compliance, copyright, legality, decency, or
+						any other aspect of the content of other linked sites.</li>
 				</ul>
 			</div>
 
@@ -94,29 +185,29 @@
 
 		<!-- Initialize Swiper -->
 		<script>
-			$(document).ready(function(){
+			$(document).ready(function () {
 
 
 				var swiper = new Swiper('.homeslider > .swiper-container', {
 					pagination: '.swiper-pagination',
 					paginationClickable: true,
-					preventClicks:false,
-					preventClicksPropagation:false,
-					effect:'fade',
+					preventClicks: false,
+					preventClicksPropagation: false,
+					effect: 'fade',
 					breakpoints: {
 						320: {
-							height:200
+							height: 200
 						},
 
 						480: {
-							height:300
+							height: 300
 						},
 
 						768: {
-							height:400
+							height: 400
 						},
 						1024: {
-							height:500
+							height: 500
 						}
 					}
 				});
@@ -126,8 +217,8 @@
 					prevButton: '.recent-prev',
 					slidesPerView: 8,
 					paginationClickable: true,
-					preventClicks:false,
-					preventClicksPropagation:false,
+					preventClicks: false,
+					preventClicksPropagation: false,
 					spaceBetween: 10,
 					breakpoints: {
 						320: {
@@ -156,8 +247,8 @@
 					prevButton: '.most-prev',
 					slidesPerView: 8,
 					paginationClickable: true,
-					preventClicks:false,
-					preventClicksPropagation:false,
+					preventClicks: false,
+					preventClicksPropagation: false,
 					spaceBetween: 10,
 					breakpoints: {
 						320: {
@@ -186,8 +277,8 @@
 					prevButton: '.top-prev',
 					slidesPerView: 8,
 					paginationClickable: true,
-					preventClicks:false,
-					preventClicksPropagation:false,
+					preventClicks: false,
+					preventClicksPropagation: false,
 					spaceBetween: 10,
 					breakpoints: {
 						320: {
@@ -213,8 +304,11 @@
 
 			});
 
-			
+
 		</script>
-    </div>
+	</div>
+	{% block extra_script %}
+	{% endblock extra_script %}
 </body>
+
 </html>
