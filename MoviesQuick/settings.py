@@ -87,11 +87,11 @@ WSGI_APPLICATION = 'MoviesQuick.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'movies',
-        'HOST':"localhost",
-        "USER":"test",
-        "PASSWORD":"test123",
+        'ENGINE': os.environ.get("DB_ENGINE"),
+        'NAME': os.environ.get("DB_NAME"),
+        'HOST':os.environ.get("DB_HOST"),
+        "USER":os.environ.get("DB_USER"),
+        "PASSWORD":os.environ.get("DB_PASSWORD"),
     }
 }
 
