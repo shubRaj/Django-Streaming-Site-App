@@ -1,87 +1,79 @@
-{% extends 'base.html' %}
-{% load static %}
-{% block extra_head %}
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-{% endblock extra_head %}
-{% block slider %}
-    		<!-- Swiper -->
-		<div class="homeslider">
-			<div class="swiper-container">
+{% extends 'base.html' %} {% load static %} {% block extra_head %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> {% endblock extra_head %} {% block slider %}
+<!-- Swiper -->
+<div class="homeslider">
+    <div class="swiper-container">
 
-				<div class="swiper-wrapper">
-                    {% for movie in recent %}
-                    
-                    <div class="swiper-slide">
-					<img src="{{movie.banner.url}}" alt="{{movie.title}}-banner">
-				    <div class="caption">
-				        {% if request.user_agent.is_mobile %}
-				        	<div class="captioninside">
-							    <h4 style="color:#03A9F4;margin-bottom:10px;">{{movie.title | title}}</h4>
-							     <i class="fa fa-star" aria-hidden="true" style="    z-index: 9998;
+        <div class="swiper-wrapper">
+            {% for movie in recent %}
+
+            <div class="swiper-slide">
+                <img src="{{movie.banner.url}}" alt="{{movie.title}}-banner">
+                <div class="caption">
+                    {% if request.user_agent.is_mobile %}
+                    <div class="captioninside">
+                        <h4 style="color:#03A9F4;margin-bottom:10px;">{{movie.title | title}}</h4>
+                        <i class="fa fa-star" aria-hidden="true" style="    z-index: 9998;
                                     color: #00C851;
                                     margin-left:16%;
                                     margin-bottom:8px;
                                     font-size: 1rem;
                                     transform: translateX(-50%)"> {{movie.rating|default_if_none:"0"}}/10</i>
-							     <p style="color:#f90;margin-bottom:10px;"><b>Release date:</b> {{movie.production|default_if_none:"unknown"}}</p>
-							     {% if movie.taglines %}
-							    <h5 style="color:#f90;margin-bottom:5px;"><b>Tagline:</b> {{movie.tagline | title}}</h5>
-							    {% else %}
-							    {% endif %}
-								<a href="" class="playbutton">Watch Now</a>
-							</div>
-				        {% else %}
-							<div class="captioninside">
-							    <h1 style="color:#03A9F4;margin-bottom:10px;">{{movie.title | title}}</h1>
-							    
-                                <i class="fa fa-star" aria-hidden="true" style="    z-index: 9998;
+                        <p style="color:#f90;margin-bottom:10px;"><b>Release date:</b> {{movie.production|default_if_none:"unknown"}}
+                        </p>
+                        {% if movie.taglines %}
+                        <h5 style="color:#f90;margin-bottom:5px;"><b>Tagline:</b> {{movie.tagline | title}}</h5>
+                        {% else %} {% endif %}
+                        <a href="" class="playbutton">Watch Now</a>
+                    </div>
+                    {% else %}
+                    <div class="captioninside">
+                        <h1 style="color:#03A9F4;margin-bottom:10px;">{{movie.title | title}}</h1>
+
+                        <i class="fa fa-star" aria-hidden="true" style="    z-index: 9998;
                                     color: #00C851;
                                     margin-left:57px;
                                     margin-bottom:15px;
                                     font-size: 2rem;
                                     transform: translateX(-50%)"> {{movie.rating|default_if_none:"0"}}/10</i>
-							     <p style="color:#f90;margin-bottom:10px;"><b>Release date:</b> {{movie.production|default_if_none:"unknown"}}</p>
-							     {% if movie.taglines %}
-							    <h5 style="color:#f90;margin-bottom:5px;"><b>Tagline:</b> {{movie.tagline | title}}</h5>
-							    {% else %}
-							    {% endif %}
-                                <p style="color:#f90;margin-bottom:10px;"><b>Starring:</b> 
-                                    {% for cast in movie.movie_cast.all %}
-                                        {% if forloop.last %}
-                                            {{cast.name}} 
-                                        {% else %}
-                                            {{cast.name}},
-                                        {% endif %}
-                                    {% endfor %}
-                                </p>
-							    <p style="color:#f90;margin-bottom:10px;">
-							        <b>Language:</b> {{movie.language|title}}
-							    </p>
-								<a href="{% url 'app_movies:movies_detail' movie.slug %}" class="playbutton">Watch Now</a>
-							</div>
-						{% endif %}
-						</div>
-					</div>
+                        <p style="color:#f90;margin-bottom:10px;"><b>Release date:</b> {{movie.production|default_if_none:"unknown"}}
+                        </p>
+                        {% if movie.taglines %}
+                        <h5 style="color:#f90;margin-bottom:5px;"><b>Tagline:</b> {{movie.tagline | title}}</h5>
+                        {% else %} {% endif %}
+                        <p style="color:#f90;margin-bottom:10px;"><b>Starring:</b> {% for cast in movie.movie_cast.all|slice:":30" %} {% if forloop.last %} {{cast.name}} {% else %} {{cast.name}}, {% endif %} {% endfor %}
+                        </p>
+                        <p style="color:#f90;margin-bottom:10px;">
+                            <b>Language:</b> {{movie.language|title}}
+                        </p>
+                        <a href="{% url 'app_movies:movies_detail' movie.slug %}" class="playbutton">Watch Now</a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
 
-                    {% endfor %}
-				</div>
-				<!-- Add Pagination -->
-				<div class="swiper-pagination"></div>
-			</div>
-		</div>
-{% endblock slider %}
-{% block content %}
-
-{% if featured %}
+            {% endfor %}
+        </div>
+        <!-- Add Pagination -->
+        <div class="swiper-pagination"></div>
+    </div>
+</div>
+{% endblock slider %} {% block content %} {% if featured %}
 <section class="panel">
     <h2>Featured</h2>
     <div class="topslider">
         <div class="swiper-container">
             <div class="swiper-wrapper">
                 {% for movie in featured %}
-                <div class="swiper-slide"><a href="{% url 'app_movies:movies_detail' movie.slug %}"><img src="{{movie.poster.url}}" alt="{{movie.title}}-poster"><h3 class="hometitle">{{movie.title}}</h3></a></div>
+                <div class="swiper-slide">
+                    <a href="{% url 'app_movies:movies_detail' movie.slug %}"><img src="{{movie.poster.url}}" alt="{{movie.title}}-poster">
+                        <h3 class="hometitle">{{movie.title}}</h3>
+                    </a>
+                </div>
                 {% endfor %}
-                <div class="swiper-slide"><a href="{% url 'app_movies:movies_status' 'featured' %}"><img src="{% static 'img/others.png' %}"></a></div>
+                <div class="swiper-slide">
+                    <a href="{% url 'app_movies:movies_status' 'featured' %}"><img src="{% static 'img/others.png' %}"></a>
+                </div>
             </div>
             <div class="nextdirection most-next"><img src="{% static 'img/right-arrow.svg' %}"> </div>
             <div class="leftdirection most-prev"><img src="{% static 'img/left-arrow.svg' %}"> </div>
@@ -89,17 +81,22 @@
         </div>
     </div>
 </section>
-{% endif %}
-{% if recent %}
+{% endif %} {% if recent %}
 <section class="panel">
     <h2>Recently Added</h2>
     <div class="recentslider">
         <div class="swiper-container">
             <div class="swiper-wrapper">
                 {% for movie in recent %}
-                <div class="swiper-slide"><a href="{% url 'app_movies:movies_detail' movie.slug %}"><img src="{{movie.poster.url}}" alt="{{movie.title}}-poster"><h3 class="hometitle">{{movie.title}}</h3></a></div>
+                <div class="swiper-slide">
+                    <a href="{% url 'app_movies:movies_detail' movie.slug %}"><img src="{{movie.poster.url}}" alt="{{movie.title}}-poster">
+                        <h3 class="hometitle">{{movie.title}}</h3>
+                    </a>
+                </div>
                 {% endfor %}
-                <div class="swiper-slide"><a href="{% url 'app_movies:movies_status' 'recent' %}"><img src="{% static 'img/others.png' %}"></a></div>
+                <div class="swiper-slide">
+                    <a href="{% url 'app_movies:movies_status' 'recent' %}"><img src="{% static 'img/others.png' %}"></a>
+                </div>
             </div>
             <div class="nextdirection most-next"><img src="{% static 'img/right-arrow.svg' %}"> </div>
             <div class="leftdirection most-prev"><img src="{% static 'img/left-arrow.svg' %}"> </div>
@@ -107,17 +104,22 @@
         </div>
     </div>
 </section>
-{% endif %}
-{% if mostwatched %}
+{% endif %} {% if mostwatched %}
 <section class="panel">
     <h2>Trending Today</h2>
     <div class="topslider">
         <div class="swiper-container">
             <div class="swiper-wrapper">
                 {% for movie in mostwatched %}
-                <div class="swiper-slide"><a href="{% url 'app_movies:movies_detail' movie.slug %}"><img src="{{movie.poster.url}}" alt="{{movie.title}}-poster"><h3 class="hometitle">{{movie.title}}</h3></a></div>
+                <div class="swiper-slide">
+                    <a href="{% url 'app_movies:movies_detail' movie.slug %}"><img src="{{movie.poster.url}}" alt="{{movie.title}}-poster">
+                        <h3 class="hometitle">{{movie.title}}</h3>
+                    </a>
+                </div>
                 {% endfor %}
-                <div class="swiper-slide"><a href="{% url 'app_movies:movies_status' 'mostwatched' %}"><img src="{% static 'img/others.png' %}"></a></div>
+                <div class="swiper-slide">
+                    <a href="{% url 'app_movies:movies_status' 'mostwatched' %}"><img src="{% static 'img/others.png' %}"></a>
+                </div>
             </div>
             <div class="nextdirection most-next"><img src="{% static 'img/right-arrow.svg' %}"> </div>
             <div class="leftdirection most-prev"><img src="{% static 'img/left-arrow.svg' %}"> </div>
@@ -125,5 +127,4 @@
         </div>
     </div>
 </section>
-{% endif %}
-{% endblock content %}
+{% endif %} {% endblock content %}

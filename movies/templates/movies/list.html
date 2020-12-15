@@ -1,6 +1,4 @@
-{% extends 'base.html' %}
-{% block title %}Movies{% endblock title %}
-{% block content %}
+{% extends 'base.html' %} {% block title %}Movies{% endblock title %} {% block content %}
 <section class="centered">
     {% if movies %}
     <h3>Movies</h3>
@@ -27,9 +25,6 @@
         </div>
         {% endfor %}
     </div>
-    {% endif %}
-    {% if is_paginated %}
-        {% include 'pagination.html' with page_obj=page_obj Qparam=request.GET.query only %}
-    {% endif %}
+    {% endif %} {% if is_paginated %} {% include 'pagination.html' with page_obj=page_obj Qparam=request.GET.query only %} {% endif %}
 </section>
 {% endblock content %}

@@ -1,0 +1,116 @@
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,600);
+*,
+*:before,
+*:after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #105469;
+    font-family: 'Open Sans', sans-serif;
+}
+
+table {
+    border-radius: 0.25em;
+    border-collapse: collapse;
+    margin: 1em;
+    width: 100%;
+}
+
+th {
+    background: #012B39;
+    border-bottom: 1px solid #364043;
+    color: #E2B842;
+    font-size: 0.85em;
+    font-weight: 600;
+    padding: 0.5em 1em;
+    text-align: left;
+}
+
+td {
+    color: #fff;
+    font-weight: 250;
+    padding: 0.65em 1em;
+}
+
+tbody tr {
+    background: #012B39;
+    transition: background 0.25s ease;
+}
+
+tbody tr:hover {
+    background: #014055;
+}
+
+@media screen and (min-width: 1025px) {
+    .content-table,
+    .pagination-table {
+        transform: translate(-24%, 0);
+    }
+    .magnet-xm {
+        text-align: center;
+    }
+}
+
+@media screen and (max-width: 1024px) {
+    table {
+        border: 0;
+    }
+    table caption {
+        font-size: 1.3em;
+    }
+    table thead {
+        border: none;
+        clip: rect(0 0 0 0);
+        height: 1px;
+        margin: -1px;
+        overflow: hidden;
+        padding: 0;
+        position: absolute;
+        width: 1px;
+    }
+    table>tbody>tr {
+        border-bottom: 3px solid #ddd;
+        display: block;
+        margin-bottom: 0.625em;
+    }
+    table td {
+        border-bottom: 1px solid #ddd;
+        display: block;
+        font-size: .8em;
+        text-align: right;
+    }
+    table td::before {
+        /*
+      * aria-label has no advantage, it won't be read inside a table
+      content: attr(aria-label);
+      */
+        content: attr(data-label);
+        float: left;
+        font-weight: bold;
+    }
+    table td:last-child {
+        border-bottom: 0;
+    }
+    table {
+        border-collapse: collapse;
+        margin: 0 0 0 2vw;
+        padding: 0;
+        width: calc(100% - 5vw);
+        table-layout: fixed;
+    }
+}
+
+a:visited {
+    color: blue;
+}
+
+a:hover {
+    cursor: pointer;
+}
+
+a:active {
+    color: red;
+}

@@ -6,6 +6,7 @@ from django.core.validators import MaxValueValidator
 from django.contrib.auth.models import User
 from PIL import Image
 import string,random
+import datetime
 import requests
 from concurrent.futures import ThreadPoolExecutor
 from django.conf import settings
@@ -28,12 +29,7 @@ CATEGORY_CHOICES = (
     ("thriller","THRILLER"),
     ("war","WAR"),   
 )
-LANGUAGE_CHOICES = (
-    ("en","ENGLISH"),
-    ("hi","HINDI"),
-    ("ch","CHINESE"),
-    ("pun","PUNJABI")
-)
+LANGUAGE_CHOICES = settings.LANGUAGES
 STATUS_CHOICES = (
     ("featured","FEATURED"),
     ("mostwatched","MOST WATCHED"),
@@ -45,16 +41,19 @@ TAG_CHOICES=(
 )
 def resize_image(original_image,image_name,image_size):
     image = Image.open(original_image)
-    print(image.width!=image_size[0] or image.height!=image_size[1])
     if image.width!=image_size[0] or image.height!=image_size[1]:
-        image.resize(image_size)
+        image.thumbnail(image_size)
         if "poster" in image_name:
             image.save(Path(settings.MEDIA_ROOT)/f"poster/{image_name}")
+        elif "cast" in image_name:
+            image.save(Path(settings.MEDIA_ROOT)/f"casts/{image_name}")
         else:
             image.save(Path(settings.MEDIA_ROOT)/f"banner/{image_name}")
     else:
         if "poster" in image_name:
             image.save(Path(settings.MEDIA_ROOT)/f"poster/{image_name}")
+        elif "cast" in image_name:
+            image.save(Path(settings.MEDIA_ROOT)/f"casts/{image_name}")
         else:
             image.save(Path(settings.MEDIA_ROOT)/f"banner/{image_name}")
     os.remove(original_image)
@@ -80,13 +79,13 @@ def downloadImage(image_url,image_name,image_size):
     return image_name
 class Movie(models.Model):
     title = models.CharField(max_length=200)
-    imdbID = models.IntegerField(null=True,blank=True,unique=True)
+    imdbID = models.CharField(max_length=16,null=True,blank=True,unique=True)
     posterURL = models.URLField(max_length=2083,null=True,blank=True)
     bannerURL = models.URLField(max_length=2083,null=True,blank=True)
     poster = models.ImageField(upload_to="poster",default="poster/poster.jpg")
     banner = models.ImageField(upload_to="banner",default="banner/banner.jpg")
-    category = MultiSelectField(choices=CATEGORY_CHOICES,max_length=40,max_choices=4,null=True)
-    language = MultiSelectField(choices=LANGUAGE_CHOICES,max_length=30,max_choices=3,null=True)
+    category = MultiSelectField(choices=CATEGORY_CHOICES,max_length=100,max_choices=4,null=True)
+    language = MultiSelectField(choices=LANGUAGE_CHOICES,max_length=100,max_choices=3,null=True)
     status = MultiSelectField(choices=STATUS_CHOICES,max_length=30,max_choices=3,null=True,blank=True)
     tagline = models.CharField(max_length=200,null=True,blank=True)
     description = models.TextField(blank=True,null=True)
@@ -96,13 +95,15 @@ class Movie(models.Model):
     download= models.URLField(blank=True,null=True)
     views = models.IntegerField(default=0)
     slug = models.SlugField(blank=True,max_length=283)
-    production = models.DateField(null=True,blank=True)
+    production = models.DateField(null=True,blank=True,default=datetime.date.today)
     uploaded_on = models.DateTimeField(default=timezone.now,editable=False)
     def __str__(self):
         return f"{self.title}"
     def save(self,*args,**kwargs):
         if not self.slug:
-            self.slug = f"{slugify(self.title)}-{self.imdbID}"
+            # date_time_obj = datetime.datetime.strptime(self.production,"%Y-%m-%d")
+            year = self.production.split("-")[0]
+            self.slug = f"{slugify(self.title)}-{year}"
         with ThreadPoolExecutor(max_workers=2) as executor:
             #and self._meta.get_field("poster").default in self.poster.path
             if self.posterURL:
@@ -117,8 +118,15 @@ class Movie(models.Model):
 class Cast(models.Model):
     movie = models.ManyToManyField(Movie,related_name="movie_cast")
     name = models.CharField(max_length=50,null=True,unique=True)
+    imageURL = models.URLField(blank=True,null=True)
     image = models.ImageField(upload_to="casts",default="casts/casts.jpg")
-    actress = models.BooleanField(default=True)
+    def save(self,*args,**kwargs):
+        with ThreadPoolExecutor(max_workers=1) as executor:
+            if self.imageURL:
+                imageThread = executor.submit(downloadImage,self.imageURL,f"{self.name}-cast",(180,180))
+                self.image = f"casts/{imageThread.result()}"
+                self.imageURL = None
+        super(Cast,self).save(*args,**kwargs)
 class TorAbs(models.Model):
     quality = models.CharField(max_length=30,null=True,blank=True)
     link = models.URLField(max_length=2083)

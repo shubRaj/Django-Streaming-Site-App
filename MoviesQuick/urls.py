@@ -19,6 +19,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path("torrent/",include("torrents.urls",namespace="torrents")),
     path("",include("movies.urls",namespace="movies")),
 ]
 if settings.DEBUG:

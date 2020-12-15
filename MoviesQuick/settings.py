@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'movies.apps.MoviesConfig',
+    'torrents.apps.TorrentsConfig',
     'django_user_agents',
 ]
 if DEBUG:
@@ -138,3 +139,5 @@ STATICFILES_DIRS = [
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR/"media"
 STATIC_ROOT = BASE_DIR/"assets"
+LOGIN_REDIRECT_URL = "/"
+LOGIN_URL = "/admin/"

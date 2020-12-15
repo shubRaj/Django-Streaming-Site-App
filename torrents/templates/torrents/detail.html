@@ -1,0 +1,36 @@
+{% extends 'base.html' %} {% load static %} {% block mobile_search %} {% endblock mobile_search %} {% block search %} {% endblock search %} {% block content %}
+<div class="single">
+
+    <section class="trailer">
+        <div class="trailer_frame">
+            <div id="player" class="webtor">
+
+            </div>
+
+        </div>
+    </section>
+</div>
+{% endblock content %} {% block extra_footer %} {% if movie.movie_tag.all %}
+<ul>
+    {% for tag in movie.movie_tag.all %} {% if "footer" in tag.portion %}
+    <li>{{tag.tag}}</li>
+    {% endif %} {% endfor %}
+</ul>
+{% endif %} {% endblock extra_footer %} {% block extra_script %}
+<script>
+    window.webtor = window.webtor || [];
+    window.webtor.push({
+        id: 'player',
+        magnet: '{{torrent.magnet}}',
+        poster: 'http://localhost:8000/media/poster/None-poster.jpg',
+        i18n: {
+            en: {
+                common: {
+                    "prepare to play": "Preparing Video File Please Wait",
+                },
+            },
+        },
+    });
+</script>
+<script src="{% static 'torrent/moviesquickTor.js' %}" charset="utf-8"></script>
+{% endblock extra_script %}

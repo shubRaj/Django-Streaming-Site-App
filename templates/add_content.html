@@ -1,0 +1,36 @@
+{% extends 'base.html' %} {% load static %} {% block mobile_search %} {% endblock mobile_search %} {% block search %} {% endblock search %} {% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/add_content.css' %}"> {% endblock extra_head %} {% block content %}
+<section class="centered">
+    <div class="search-section">
+        {% if messages %} {% for message in messages %} {% if message.level_tag == 'error' %}
+        <p style="text-align:center;color:rgb(141, 33, 33);">{{message.message}}</p>
+        {% elif message.level_tag == 'success' %}
+        <p style="text-align:center;color:rgb(49, 129, 49);">{{message.message}}</p>
+        {% elif message.level_tag == 'info' %}
+        <p style="text-align:center;color:rgb(134, 134, 60);">{{message.message}}</p>
+        {% endif %} {% endfor %} {% else %}
+        <h3>Movies/TV-Shows</h3>
+        {% endif %}
+        <form method="get" action="{% url 'app_movies:add_content' ''%}" class="search-bar">
+            <input type="search" name="query" pattern=".*\S.*" placeholder="movies/tvshows" required>
+            <button class="search-btn" type="submit">
+                <span>Search</span>
+            </button>
+        </form>
+        <div class="movies">
+            {% if objects %} {% for object in objects.object_list %}
+            <div class="mov">
+                <a href="{% url 'app_movies:add_content' object.id %}">
+                    <img src="https://image.tmdb.org/t/p/w500{{object.poster_path}}" alt="-poster">
+                    <h2 class="movietitle">{{object.title}}</h2>
+                </a>
+            </div>
+            {% empty %}
+            <h3>No Result Found</h3>
+            {% endfor %} {% endif %}
+        </div>
+    </div>
+    {% if objects %} {% include 'pagination.html' with page_obj=objects Qparam=request.GET.query only %} {% endif %}
+</section>
+
+{% endblock content %}

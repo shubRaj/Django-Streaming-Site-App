@@ -1,13 +1,19 @@
 from django.shortcuts import render
-from .models import Movie,Cast,Term
-from django.http import HttpResponseNotModified
+from .models import Movie,Cast,Term,Torrent,Magnet
+from django.urls import reverse
+from django.core.paginator import  Paginator
+from django.http import HttpResponseNotModified,HttpResponseRedirect
 from django.views.generic import (ListView,View,
 DetailView,YearArchiveView
 )
+from .tmdbAPI import TMDBAPI
 from .forms import CommentForm
 from django.conf import settings
+from django.contrib.auth.models import User,Group
+from django.contrib.auth.mixins import LoginRequiredMixin,UserPassesTestMixin
 from django.contrib import messages
 from django.core.mail.message import EmailMessage
+from .ytsmx import YTSMX
 import random
 class MovieHome(ListView):
     model = Movie
@@ -106,3 +112,75 @@ class MovieStatus(ListView):
             #here i used set to prevent duplicacy
             context["recommended"] = {random.choice(Movie.objects.all()) for _ in range(20)}
         return context
+class AddContent(UserPassesTestMixin,View):
+    def get(self,request,tmdbId):
+        tmdb = TMDBAPI()
+        if tmdbId:
+            try:
+                poster_base_url = getattr(tmdb,"poster_base_url")
+                banner_base_url = getattr(tmdb,"banner_base_url")
+                movie_info = tmdb.get(tmdbId)
+                if not Movie.objects.filter(imdbID=movie_info.get("imdb_id")).exists():
+                    casts = tmdb.get_casts(tmdbId)
+                    genres = [genre.get("name").lower() for genre in movie_info.get("genres")]
+                    languages = [language.get("iso_639_1") for language in movie_info.get("spoken_languages")]
+                    backdrop = movie_info.get("backdrop_path")
+                    if not backdrop:
+                        backdrop = None
+                    else:
+                        backdrop = banner_base_url+backdrop
+                    movie = Movie.objects.create(
+                        title=movie_info.get("title"),
+                        imdbID=movie_info.get("imdb_id"),
+                        posterURL=f'{poster_base_url}{movie_info.get("poster_path")}',
+                        bannerURL = backdrop,
+                        category = genres,
+                        language = languages,
+                        tagline = movie_info.get("tagline"),
+                        description = movie_info.get("overview"),
+                        trailer = f"https://www.youtube.com/embed/{movie_info.get('trailer')}",
+                        rating = movie_info.get("vote_average",0.0),
+                        runtime = movie_info.get("runtime"),
+                        production = movie_info.get("release_date")
+                    )
+                    if casts:
+                        for cast in casts:
+                            if Cast.objects.filter(name=cast.name).exists():
+                                Cast.objects.get(name=cast.name).movie.add(movie)
+                            else: 
+                                if not cast.image:
+                                    Cast.objects.create(name=cast.name,).movie.add(movie)
+                                else:
+                                    Cast.objects.create(name=cast.name,imageURL=f"{poster_base_url}{cast.image}").movie.add(movie)
+                    ytsmx = YTSMX(f"https://yts.mx/movies/{movie.slug}")
+                    torrents = ytsmx.get_torrent()
+                    magnets = ytsmx.get_magnet()
+                    if torrents:
+                        for torrent in torrents:
+                            Torrent.objects.create(movie=movie,quality=torrent.quality,link=torrent.download)
+                    if magnets:
+                        for magnet in magnets:
+                            Magnet.objects.create(movie=movie,quality=magnet.quality,link=magnet.magnet)
+                    messages.success(request,f"{movie_info.get('title')} Added Successfully",fail_silently=True)
+                else:
+                    messages.info(request,f"{movie_info.get('title')} Exists",fail_silently=True)
+            except:
+                if movie:
+                    movie.delete()
+                messages.error(request,"Couldn't Added The Content",fail_silently=True)
+        else:
+            query = request.GET.get("query")
+            if query:
+                page = request.GET.get("page",1)
+                objects = [item for item in tmdb.search(query) if item.get("poster_path")]
+                paginated = Paginator(objects,15)
+                objects_on_page = paginated.page(page)
+                context = {
+                    "objects":objects_on_page,
+                }
+                return render(request,"add_content.html",context)
+        return render(request,"add_content.html")
+    def test_func(self):
+        return self.request.user.groups.filter(name="Manager").exists() or self.request.user.is_superuser
+    def handle_no_permission(self):
+        return HttpResponseRedirect(reverse("app_movies:movies_home"))

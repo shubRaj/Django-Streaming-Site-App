@@ -1,0 +1,58 @@
+{% extends 'base.html' %} {% load static %} {% block mobile_search %} {% endblock mobile_search %} {% block search %} {% endblock search %} {% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/add_content.css' %}">
+<link rel="stylesheet" href="{% static 'css/torrent_content.css' %}">
+<script src="https://use.fontawesome.com/releases/v5.13.0/js/all.js" crossorigin="anonymous"></script>{% endblock extra_head %} {% block content %}
+<section class="centered">
+    <div class="search-section">
+        {% if messages %} {% for message in messages %}
+        <h3>{{message.message}}</h3>
+        {% endfor %} {% else %}
+        <h3>Torrent Search</h3>
+        {% endif %}
+        <form method="get" action="{% url 'app_torrents:torrents_home' %}" class="search-bar">
+            <input type="search" name="query" pattern=".*\S.*" placeholder="Search Here......" minlength="4" required>
+            <button class="search-btn" type="submit">
+                <span>Search</span>
+            </button>
+        </form>
+        {% if objects %}
+        <div class="content-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Category</th>
+                        <th scope="col">Seeders</th>
+                        <th scope="col">Leechers</th>
+                        <th scope="col">Size</th>
+                        <th scope="col">Magnet</th>
+                        <th scope="col">Watch</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for object in objects %}
+                    <tr>
+                        <td scope="row" data-label="Name">{{object.name}}</td>
+                        <td data-label="Seeders">{{object.category}}</td>
+                        <td data-label="Seeders">{{object.seeders}}</td>
+                        <td data-label="Leechers">{{object.leechers}}</td>
+                        <td data-label="Size">{{object.size}}</td>
+                        <td data-label="Magnet" class="magnet-xm"><a href="{{object.magnet}}"><i class="fas fa-magnet"></i></a></td>
+                        {% if object.category in 'MOVIESXXXTV' %}
+                        <td data-label="Watch"><a class="playbutton" href="{% url 'app_torrents:torrent_detail' object.id %}" style="color:white;">Watch</a></td>
+                        {% else %}
+                        <td data-label="Watch"></td> {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+    </div>
+    <div class="pagination-table">
+        {% if objects %} {% include 'pagination.html' with page_obj=objects Qparam=request.GET.query only %} {% endif %}
+    </div>
+</section>
+
+{% endblock content %}
