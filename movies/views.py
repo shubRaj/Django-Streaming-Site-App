@@ -178,6 +178,8 @@ class AddContent(UserPassesTestMixin,View):
                 context = {
                     "objects":objects_on_page,
                 }
+                if not objects_on_page:
+                    messages.info(request,"No Result Found",fail_silently=True)
                 return render(request,"add_content.html",context)
         return render(request,"add_content.html")
     def test_func(self):

@@ -283,7 +283,7 @@
                 iframe.setAttribute('allowFullScreen', '');
                 iframe.setAttribute('webkitAllowFullScreen', '');
                 iframe.setAttribute('mozAllowFullScreen', '');
-                iframe.setAttribute("sandbox", "allow-same-origin");
+                iframe.setAttribute("sandbox", "allow-same-origin allow-scripts allow-orientation-lock allow-pointer-lock");
                 // iframe.sandbox = "allow-forms allow-pointer-lock allow-same-origin";
                 iframe.scrolling = 'no';
                 iframe.frameBorder = '0';
