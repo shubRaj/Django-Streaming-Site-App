@@ -3,10 +3,19 @@
 
 <head>
     <meta charset="utf-8">
-    <title>{% block title %}MoviesQuick{% endblock title %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
-
+    <title>Watch and download {% block title %}Movies/Series{% endblock title %} on {{request.get_host}}</title>
+    {% block extra_header %} {% if static_tags %}
+    <ul>
+        {% for tag in static_tags %} {% if "header" in tag.portion %}
+        <li>{{tag.tag}}</li>
+        {% endif %} {% endfor %}
+    </ul>
+    {% endif %} {% endblock extra_header %}
     <!-- Link Swiper's CSS -->
+    <meta http-equiv="content-language" content="en">
+    <meta name="robots" content="index,follow">
+    <link rel="canonical" href="https://{{request.get_host}}">
     <link rel="stylesheet" href="{% static 'css/swiper.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <link rel="icon" href="{% static 'img/favicon.png' %}" type="image/x-icon">
@@ -128,11 +137,12 @@
                         </ul>
                     </li>
                     {% endif %}
+                    <li><a href="{% url 'app_torrents:torrents_home'  %}">Torrent Search</a></li>
                     <!-- <li><a href="mostwatched.html">Most Watched</a></li> -->
                     {% block mobile_search %}
                     <li class="mobsearch">
                         <form class="mobform" method="get" action="{% url 'app_movies:search' %}">
-                            <input type="text" name="query" style="color:white" class="mobsearchfield" placeholder="Search...">
+                            <input type="text" name="query" style="color:white" class="mobsearchfield" autocomplete="off" placeholder="Search...">
                             <input type="submit" value="" class="mobsearchsubmit">
                         </form>
                     </li>
@@ -141,7 +151,7 @@
             </nav>
             {% block search %}
             <form class="search" method="get" action="{% url 'app_movies:search' %}">
-                <input type="text" name="query" style="color:white" class="searchfield" placeholder="Search...">
+                <input type="text" name="query" style="color:white" class="searchfield" placeholder="Search..." autocomplete="off">
                 <input type="submit" value="" class="searchsubmit">
             </form>
             {% endblock search %}
@@ -190,9 +200,9 @@
                         <div class="blockchain stage-paid">
                             Donation of <b>[[value]] BTC</b> Received. Thank You.
                         </div>
-                        <div class="blockchain stage-error">
+                        <!-- <div class="blockchain stage-error">
                             <font color="red">[[error]]</font>
-                        </div>
+                        </div> -->
                     </div>
                 </ul>
                 <!------------------------>

@@ -12,12 +12,16 @@ class YTSMX:
         self.torrentDownload = []
         self.magnetDownload = []
     def get_torrent(self):
-        for torrentlink in self.torrent_p.find_all("a"):
-            if "https://yts.mx/" in torrentlink["href"]:
-                self.torrentDownload.append(self.torrent(torrentlink.text,torrentlink["href"]))
-        return self.torrentDownload
+        if self.torrent_p:
+            for torrentlink in self.torrent_p.find_all("a"):
+                if "https://yts.mx/" in torrentlink["href"]:
+                    self.torrentDownload.append(self.torrent(torrentlink.text,torrentlink["href"]))
+            return self.torrentDownload
+        return []
     def get_magnet(self):
-        for magnetlinks in self.magnet_div:
-            for magnetlink in magnetlinks.find_all("a",{"class":"magnet-download"}):
-                self.magnetDownload.append(self.magnet(magnetlink["title"].split()[-2],magnetlink["href"]))
-        return self.magnetDownload
+        if self.magnet_div:
+            for magnetlinks in self.magnet_div:
+                for magnetlink in magnetlinks.find_all("a",{"class":"magnet-download"}):
+                    self.magnetDownload.append(self.magnet(magnetlink["title"].split()[-2],magnetlink["href"]))
+            return self.magnetDownload
+        return []

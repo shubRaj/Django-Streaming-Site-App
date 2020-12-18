@@ -1,44 +1,32 @@
-{% extends 'base.html' %}
-{% load static %}
-{% block content %}
+{% extends 'base.html' %} {% load static %} {% block title %}{{movie.title}}{% endblock title %}{% block description %} {{movie.description}} {% endblock description %} {% block content %}
 <div class="single">
 
     <section class="trailer">
         <h3 style="text-align: center;">{{movie.title|title}}</h3>
         <div class="trailer_frame">
+            <a name="#player"></a>
             <div id="player" class="webtor">
-                
+
             </div>
 
         </div>
     </section>
-
     <section class="movie">
         <img src="{{movie.poster.url}}" alt="{{movie.title}}-poster">
         <ul>
             <li>{{movie.title|title}}</li>
-            <li style="color:#f90;margin-bottom:10px;"><b>Original Language{{movie.language|pluralize}}:</b>
-                {{movie.language|title}}</li>
+            <li style="color:#f90;margin-bottom:10px;"><b>Original Language{{movie.language|pluralize}}:</b> {{movie.language|title}}
+            </li>
             <li>{{movie.description|title}}</li>
             <li>
-                Genre:
-                {% for category in movie.category %}
-                {% if category == movie.category|last %}
-                <a href="genre.html">{{category|title}}</a>
-                {% else %}
-                <a href="genre.html">{{category|title}}</a>,
-                {% endif %}
-                {% endfor %}
+                Genre: {% for category in movie.category %} {% if category == movie.category|last %}
+                <a href="{% url 'app_movies:search' %}?query={{category}}">{{category|title}}</a> {% else %}
+                <a href="{% url 'app_movies:search' %}?query={{category}}">{{category|title}}</a>, {% endif %} {% endfor %}
             </li>
             <li>
-                Starring:
-                {% for cast in movie.movie_cast.all %}
-                {% if forloop.last %}
-                <a href="cast.html">{{cast.name}}</a>
-                {% else %}
-                <a href="cast.html">{{cast.name}}</a>,
-                {% endif %}
-                {% endfor %}
+                Starring: {% for cast in movie.movie_cast.all|slice:":25" %} {% if forloop.last %}
+                <a href="{% url 'app_movies:search' %}?query={{cast.name}}">{{cast.name}}</a> {% else %}
+                <a href="{% url 'app_movies:search' %}?query={{cast.name}}">{{cast.name}}</a>, {% endif %} {% endfor %}
             </li>
             <li>{{movie.views}} View{{movie.views|pluralize}}</li>
         </ul>
@@ -46,50 +34,38 @@
     <section class="links">
         <h3>Links</h3>
 
-        {% with embeds=movie.movie_embed.all %}
-        {% if embeds %}
+        {% with embeds=movie.movie_embed.all %} {% if embeds %}
         <ul class="wlinks">
             <li><a>Watch:</a></li>
             {% for embed in embeds %}
-            <li><a href="{{embed.link}}">{{embed.quality}}</a></li>
+            <li>
+                <a href="{{embed.link}}" target="_blank">{{embed.quality}}</a>
+            </li>
             {% endfor %}
             <li><a href="{{movie.trailer}}">Watch Trailer</a></li>
         </ul>
-        {% endif %}
-        {% endwith %}
-
-        {% with downloads=movie.movie_download.all %}
-        {% if downloads %}
+        {% endif %} {% endwith %} {% with downloads=movie.movie_download.all %} {% if downloads %}
         <ul class="dlinks">
             <li><a>Download:</a></li>
             {% for download in downloads %}
             <li><a href="{{download.link}}" download>{{download.quality}}</a></li>
             {% endfor %}
         </ul>
-        {% endif %}
-        {% endwith %}
-
-        {% with magnets=movie.movie_magnet.all %}
-        {% if magnets %}
+        {% endif %} {% endwith %} {% with magnets=movie.movie_magnet.all %} {% if magnets %}
         <ul class="wlinks">
             <li><a>Magnet:</a></li>
             {% for magnet in magnets %}
-            <li><a href="{{magnet.link}}">{{magnet.quality}}</a></li>
+            <li><a href="{{magnet.link}}">{{magnet.quality|default_if_none:"Unknown"}}</a></li>
             {% endfor %}
         </ul>
-        {% endif %}
-        {% endwith %}
-
-        {% with torrents=movie.movie_torrent.all %}
-        {% if torrents %}
+        {% endif %} {% endwith %} {% with torrents=movie.movie_torrent.all %} {% if torrents %}
         <ul class="wlinks">
             <li><a>Torrent:</a></li>
             {% for torrent in torrents %}
             <li><a href="{{torrent.link}}" download>{{torrent.quality}}</a></li>
             {% endfor %}
         </ul>
-        {% endif %}
-        {% endwith %}
+        {% endif %} {% endwith %}
     </section>
 
     <section class="related">
@@ -106,13 +82,14 @@
         <h3>Comments</h3>
         <div id="disqus_thread"></div>
         <script>
-            var disqus_config = function () {
+            var disqus_config = function() {
                 this.page.url = "{{request.get_full_path}}/";
                 this.page.identifier = "{{movie.slug}}";
             };
 
-            (function () { // DON'T EDIT BELOW THIS LINE
-                var d = document, s = d.createElement('script');
+            (function() { // DON'T EDIT BELOW THIS LINE
+                var d = document,
+                    s = d.createElement('script');
                 s.src = 'https://moviesquick.disqus.com/embed.js';
                 s.setAttribute('data-timestamp', +new Date());
                 (d.head || d.body).appendChild(s);
@@ -120,19 +97,14 @@
         </script>
     </section>
 </div>
-{% endblock content %}
-{% block extra_footer %}
-{% if movie.movie_tag.all %}
-    <ul>
-        {% for tag in movie.movie_tag.all %}
-        {% if "footer" in tag.portion %}
-        <li>{{tag.tag}}</li>
-        {% endif %}
-        {% endfor %}
-    </ul>
-{% endif %}
-{% endblock extra_footer %}
-{% block extra_script %}
+{% endblock content %} {% block extra_footer %} {% if movie.movie_tag.all %}
+<ul>
+    {% for tag in movie.movie_tag.all %} {% if "footer" in tag.portion %}
+    <li>{{tag.tag}}</li>
+    {% endif %} {% endfor %}
+</ul>
+{% endif %} {% endblock extra_footer %} {% block extra_script %}
+<!--Switch Video Player-->
 <script>
     window.webtor = window.webtor || [];
     window.webtor.push({

@@ -1,4 +1,5 @@
-{% extends 'base.html' %} {% block title %}Movies{% endblock title %} {% block content %}
+{% extends 'base.html' %} {% load static %} {% block title %}Movies{% endblock title %} {% block content %}
+
 <section class="centered">
     {% if movies %}
     <h3>Movies</h3>
@@ -13,7 +14,18 @@
         {% endfor %}
     </div>
     {% else %}
-    <h3 style="text-align: center;">No Result Found</h3>
+    <link rel="stylesheet" href="{% static 'css/add_content.css' %}">
+
+    <link rel="stylesheet" href="{% static 'css/torrent_content.css' %}">
+    <script src="https://use.fontawesome.com/releases/v5.13.0/js/all.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.7/dist/loadingoverlay.min.js"></script>
+    <h2 style="text-align: center;">No result found try searching on torrent</h2>
+    <form method="get" name="search-form" action="{% url 'app_torrents:torrents_home' %}" class="search-bar">
+        <input type="search" name="query" pattern=".*\S.*" placeholder="Search Here......" minlength="4" autocomplete="off" required>
+        <button class="search-btn overlay" type="submit">
+            <span>Search</span>
+        </button>
+    </form>
     <h3>We recommend you</h3>
     <div class="movies">
         {% for movie in recommended %}

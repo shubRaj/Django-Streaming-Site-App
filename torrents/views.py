@@ -10,8 +10,8 @@ class TorrentHome(View):
         torrents = TorrentInfo(query)
         torrents.num_pages(pages=1)
         results = torrents.json()
-        for ndx in range(1,len(results)+1):
-            ndx = results[str(ndx)]
+        for ndx in results:
+            ndx = results[ndx]
             name,seeders,leechers,size,magnet,category = ndx.get("name","Unknown"),ndx.get("seeders",0),ndx.get("leechers",0),ndx.get("size","Unknown"),ndx.get("url","Unknown"),ndx.get("category","Unknown")
             magnet_object = Magnet.objects.filter(magnet=magnet)
             if not magnet_object.exists():
@@ -55,6 +55,9 @@ class TorrentHome(View):
                         # results = torrent_object.first().torrent_magnet.all()
                 results = Magnet.objects.filter(name__icontains=query)
                 results = self.paginate(results,15,request.GET.get("page",1))
+                #when so queryset
+                if not results:
+                    messages.info(request,"No Result Found",fail_silently=True)
                 return render(request,"torrents/torrent.html",{"objects":results})
             messages.info(request,"INVALID QUERY",fail_silently=True)
         return render(request,"torrents/torrent.html")

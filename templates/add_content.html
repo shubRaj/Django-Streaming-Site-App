@@ -12,8 +12,8 @@
         <h3>Movies/TV-Shows</h3>
         {% endif %}
         <form method="get" action="{% url 'app_movies:add_content' ''%}" class="search-bar">
-            <input type="search" name="query" pattern=".*\S.*" placeholder="movies/tvshows" required>
-            <button class="search-btn" type="submit">
+            <input type="search" name="query" pattern=".*\S.*" placeholder="movies/tvshows" autocomplete="off" required>
+            <button class="search-btn overlay" type="submit">
                 <span>Search</span>
             </button>
         </form>
@@ -21,7 +21,7 @@
             {% if objects %} {% for object in objects.object_list %}
             <div class="mov">
                 <a href="{% url 'app_movies:add_content' object.id %}">
-                    <img src="https://image.tmdb.org/t/p/w500{{object.poster_path}}" alt="-poster">
+                    <img src="https://image.tmdb.org/t/p/w500{{object.poster_path}}" alt="{{object.title}}-poster">
                     <h2 class="movietitle">{{object.title}}</h2>
                 </a>
             </div>
@@ -32,5 +32,18 @@
     </div>
     {% if objects %} {% include 'pagination.html' with page_obj=objects Qparam=request.GET.query only %} {% endif %}
 </section>
-
-{% endblock content %}
+<script>
+    jQuery.noConflict();
+    jQuery(document).on("click", ".overlay",
+        function() {
+            $.LoadingOverlaySetup({
+                background: "rgba(0, 0, 0, 0.5)",
+                image: "{% static 'img/favicon.png' %}",
+                imageAnimation: "1.5s fadein",
+                imageColor: "#ffcc00"
+            })
+            $.LoadingOverlay("show")
+        }
+    );
+</script>
+{% endblock content %} {% block extra_script %} {% endblock extra_script %}

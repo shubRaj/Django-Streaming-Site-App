@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'movies.apps.MoviesConfig',
     'torrents.apps.TorrentsConfig',
     'django_user_agents',
+    'django.contrib.sitemaps',
 ]
 if DEBUG:
     INSTALLED_APPS+='whitenoise.runserver_nostatic',

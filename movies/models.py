@@ -4,6 +4,7 @@ from django.utils.text import slugify
 from multiselectfield import MultiSelectField
 from django.core.validators import MaxValueValidator
 from django.contrib.auth.models import User
+from django.contrib.sitemaps import ping_google
 from PIL import Image
 import string,random
 import datetime
@@ -12,6 +13,7 @@ from concurrent.futures import ThreadPoolExecutor
 from django.conf import settings
 from pathlib import Path
 import os
+from django.urls import reverse
 CATEGORY_CHOICES = (
     ("action","ACTION"),
     ("drama","DRAMA"),
@@ -99,7 +101,7 @@ class Movie(models.Model):
     uploaded_on = models.DateTimeField(default=timezone.now,editable=False)
     def __str__(self):
         return f"{self.title}"
-    def save(self,*args,**kwargs):
+    def save(self,commit=True,*args,**kwargs):
         if not self.slug:
             # date_time_obj = datetime.datetime.strptime(self.production,"%Y-%m-%d")
             year = self.production.split("-")[0]
@@ -114,7 +116,18 @@ class Movie(models.Model):
                 bannerThread = executor.submit(downloadImage,self.bannerURL,f"{self.imdbID}-banner",(1920,1080))
                 self.banner = f"banner/{bannerThread.result()}"
                 self.bannerURL = None
-        super(Movie,self).save(*args,**kwargs)
+
+        super(Movie,self).save(commit*args,**kwargs)
+        try:
+            ping_google()
+        except Exception:
+            # Bare 'except' because we could get a variety
+            # of HTTP-related exceptions.
+            pass
+    class Meta:
+        ordering = ["-uploaded_on"]
+    def get_absolute_url(self):
+        return reverse("app_movies:movies_detail", kwargs={"slug": self.slug})
 class Cast(models.Model):
     movie = models.ManyToManyField(Movie,related_name="movie_cast")
     name = models.CharField(max_length=50,null=True,unique=True)
@@ -127,6 +140,7 @@ class Cast(models.Model):
                 self.image = f"casts/{imageThread.result()}"
                 self.imageURL = None
         super(Cast,self).save(*args,**kwargs)
+    
 class TorAbs(models.Model):
     quality = models.CharField(max_length=30,null=True,blank=True)
     link = models.URLField(max_length=2083)
