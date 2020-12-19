@@ -1,0 +1,1 @@
+from MoviesQuick.wsgi import application
