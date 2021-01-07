@@ -1,0 +1,29 @@
+<!DOCTYPE html> {% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EMBED PAGE</title>
+</head>
+
+<body style="margin:0px;" id="player" class="webtor">
+    <script>
+        window.webtor = window.webtor || [];
+        window.webtor.push({
+            id: 'player',
+            magnet: '{{request.GET.magnet}}',
+            poster: null,
+            i18n: {
+                en: {
+                    common: {
+                        "prepare to play": "Preparing Video File.May Take A While",
+                    },
+                },
+            },
+        });
+    </script>
+    <script src="{% static 'torrent/moviesquickTor.js' %}" charset="utf-8"></script>
+</body>
+
+</html>

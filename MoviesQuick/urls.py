@@ -26,6 +26,7 @@ sitemaps = {
     "static":StaticViewSitemap,
 }
 urlpatterns = [
+    path("apps/",include("appAPI.urls",namespace="rest_api")),
     path('admin/', admin.site.urls),
     path("torrent/",include("torrents.urls",namespace="torrents")),
     path("sitemap.xml",views.index,{"sitemaps":sitemaps},name="django.contrib.sitemaps.views.sitemap"),
@@ -33,6 +34,7 @@ urlpatterns = [
     path("",include("movies.urls",namespace="movies")),
 ]
 if settings.DEBUG:
+    urlpatterns+=path("rest-auth/",include("rest_framework.urls",namespace="rest_framework")),
     urlpatterns+=static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)+static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
 else:
     handler404 = "MoviesQuick.views.handle_page_not_found"

@@ -18,38 +18,36 @@
             </button>
         </form>
         {% if objects %}
-        <div class="content-table">
-            <table>
-                <thead>
-                    <tr>
-                        <th scope="col">Name</th>
-                        <th scope="col">Category</th>
-                        <th scope="col">Seeders</th>
-                        <th scope="col">Leechers</th>
-                        <th scope="col">Size</th>
-                        <th scope="col">Magnet</th>
-                        <th scope="col">Watch</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for object in objects %}
-                    <tr>
-                        <td scope="row" data-label="Name">{{object.name}}</td>
-                        <td data-label="Category">{{object.category}}</td>
-                        <td data-label="Seeders">{{object.seeders}}</td>
-                        <td data-label="Leechers">{{object.leechers}}</td>
-                        <td data-label="Size">{{object.size}}</td>
-                        <td data-label="Magnet" class="magnet-xm"><a href="{{object.magnet}}"><i class="fas fa-magnet"></i></a></td>
-                        {% if object.category in 'MOVIESXXXTV' %}
-                        <td data-label="Watch"><a class="playbutton" href="{% url 'app_torrents:torrent_detail' object.id %}" style="color:white;">Watch</a></td>
-                        {% else %}
-                        <td data-label="Watch"></td> {% endif %}
-                    </tr>
-                    {% endfor %}
-                </tbody>
-                </tbody>
-            </table>
-        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Category</th>
+                    <th scope="col">Seeders</th>
+                    <th scope="col">Leechers</th>
+                    <th scope="col">Size</th>
+                    <th scope="col">Magnet</th>
+                    <th scope="col">Watch</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for object in objects %}
+                <tr>
+                    <td scope="row" data-label="Name">{{object.name|truncatechars:"35"}}</td>
+                    <td data-label="Category">{{object.category}}</td>
+                    <td data-label="Seeders">{{object.seeders}}</td>
+                    <td data-label="Leechers">{{object.leechers}}</td>
+                    <td data-label="Size">{{object.size}}</td>
+                    <td data-label="Magnet" class="magnet-xm"><a href="{{object.magnet}}"><i class="fas fa-magnet"></i></a></td>
+                    {% if object.category in 'MOVIESXXXTV' %}
+                    <td data-label="Watch"><a class="playbutton" href="{% url 'app_torrents:torrent_detail' object.id %}" style="color:white;">Watch</a></td>
+                    {% else %}
+                    <td data-label="Watch"></td> {% endif %}
+                </tr>
+                {% endfor %}
+            </tbody>
+            </tbody>
+        </table>
         {% endif %}
     </div>
     <div class="pagination-table">

@@ -101,7 +101,7 @@ class Movie(models.Model):
     uploaded_on = models.DateTimeField(default=timezone.now,editable=False)
     def __str__(self):
         return f"{self.title}"
-    def save(self,commit=True,*args,**kwargs):
+    def save(self,*args,**kwargs):
         if not self.slug:
             # date_time_obj = datetime.datetime.strptime(self.production,"%Y-%m-%d")
             year = self.production.split("-")[0]
@@ -117,7 +117,7 @@ class Movie(models.Model):
                 self.banner = f"banner/{bannerThread.result()}"
                 self.bannerURL = None
 
-        super(Movie,self).save(commit*args,**kwargs)
+        super(Movie,self).save(*args,**kwargs)
         try:
             ping_google()
         except Exception:
@@ -142,7 +142,7 @@ class Cast(models.Model):
         super(Cast,self).save(*args,**kwargs)
     
 class TorAbs(models.Model):
-    quality = models.CharField(max_length=30,null=True,blank=True)
+    quality = models.CharField(max_length=200,null=True,blank=True)
     link = models.URLField(max_length=2083)
     class Meta:
         abstract=True
@@ -185,3 +185,14 @@ class DynamicTag(AbsTag):
 class Term(models.Model):
     paragraph = models.TextField()
     created_on = models.DateTimeField(default=timezone.now,editable=False)
+ADS_SECTION = (
+    ("list","LIST"),
+    ("detail","DETAIL"),
+    ("base","BASE"),
+    )
+class AdsPlacement(models.Model):
+    section = MultiSelectField(choices=ADS_SECTION,max_choices=3,max_length=14)
+    code = models.TextField()
+    class Meta:
+        verbose_name="AdsPlacement"
+    

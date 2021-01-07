@@ -1,1 +1,6 @@
 db.sqlite3
+config.cfg
+movies_data.json
+movies_data_watchlink.json
+__pycache__
+player-sdk-js-master.zip

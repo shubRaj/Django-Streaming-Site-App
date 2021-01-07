@@ -1,8 +1,8 @@
 from django.db import models
 import uuid
 class TorrentKeyword(models.Model):
-    keyword = models.CharField(max_length=300,unique=True)
-    added_on = models.DateField(auto_now=True,editable=False)
+    keyword = models.CharField(max_length=250,unique=True)
+    added_on = models.DateField(auto_now_add=True,editable=False)
     class Meta:
         ordering=["-added_on"]
     def __str__(self):
@@ -16,7 +16,7 @@ class Magnet(models.Model):
     leechers = models.IntegerField(default=0)
     size = models.CharField(max_length=10,blank=True,null=True)
     magnet = models.TextField(null=True,unique=True)
-    added_on = models.DateTimeField(auto_now_add=True,editable=False)
+    added_on = models.DateTimeField(auto_now=True,editable=False)
     def __str__(self):
         return f"{self.name}"
     class Meta:

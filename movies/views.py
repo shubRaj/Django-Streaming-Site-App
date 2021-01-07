@@ -18,6 +18,8 @@ from django.core.mail.message import EmailMessage
 from .ytsmx import YTSMX
 import random
 from .desicinemaAPI import DesiCinemaAPI
+from urllib.parse import quote
+
 from django.utils.text import slugify
 class MovieHome(ListView):
     model = Movie
@@ -98,7 +100,7 @@ class Contact(View):
         service = self.request.POST.get("service")
         message = self.request.POST.get("message")
         try:
-            email = EmailMessage(subject=f"{service}[{email}]",to=["shuvraj1234@gmail.com",],from_email=settings.EMAIL_HOST_USER)
+            email = EmailMessage(subject=f"{service}[{email}]",to=[admin[1] for admin in settings.ADMINS],from_email=settings.EMAIL_HOST_USER)
             email.send()
             messages.add_message(request,messages.SUCCESS,f"Thank You {name} For Query,We'll Get Back To You ASAP",fail_silently=True)
         except:
@@ -127,7 +129,7 @@ class AddContent(UserPassesTestMixin,View):
     def get(self,request,tmdbId):
         tmdb = TMDBAPI()
         if tmdbId:
-            try:
+            if tmdbId:
                 poster_base_url = getattr(tmdb,"poster_base_url")
                 banner_base_url = getattr(tmdb,"banner_base_url")
                 movie_info = tmdb.get(tmdbId)
@@ -140,7 +142,7 @@ class AddContent(UserPassesTestMixin,View):
                         backdrop = None
                     else:
                         backdrop = banner_base_url+backdrop
-                    movie = Movie(
+                    movie = Movie.objects.create(
                         title=movie_info.get("title"),
                         imdbID=movie_info.get("imdb_id"),
                         posterURL=f'{poster_base_url}{movie_info.get("poster_path")}',
@@ -154,16 +156,17 @@ class AddContent(UserPassesTestMixin,View):
                         runtime = movie_info.get("runtime"),
                         production = movie_info.get("release_date")
                     )
-                    movie.save(commit=False)
                     if casts:
                         for cast in casts:
+                            
                             if Cast.objects.filter(name=cast.name).exists():
                                 Cast.objects.get(name=cast.name).movie.add(movie)
                             else: 
                                 if not cast.image:
-                                    Cast.objects.create(name=cast.name,).movie.add(movie)
+                                    Cast.objects.create(name=cast.name).movie.add(movie)
                                 else:
                                     Cast.objects.create(name=cast.name,imageURL=f"{poster_base_url}{cast.image}").movie.add(movie)
+                            
                     ytsmx = YTSMX(f"https://yts.mx/movies/{movie.slug}")
                     torrents = ytsmx.get_torrent()
                     magnets = ytsmx.get_magnet()
@@ -193,7 +196,9 @@ class AddContent(UserPassesTestMixin,View):
                     messages.success(request,f"{movie_info.get('title')} Added Successfully",fail_silently=True)
                 else:
                     messages.info(request,f"{movie_info.get('title')} Exists",fail_silently=True)
-            except Exception:
+            else:
+                if movie:
+                    movie.delete()
                 messages.error(request,"Couldn't Added The Content",fail_silently=True)
         else:
             query = request.GET.get("query")

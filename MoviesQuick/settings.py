@@ -31,10 +31,8 @@ EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 EMAIL_BACKEND = os.environ.get("EMAIL_BACKEND")
 ALLOWED_HOSTS = ["*"]
-
 ADMINS = ((os.environ.get("ADMINUSERNAME"),os.environ.get("ADMINUSEREMAIL")))
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -46,6 +44,8 @@ INSTALLED_APPS = [
     'torrents.apps.TorrentsConfig',
     'django_user_agents',
     'django.contrib.sitemaps',
+    'appAPI.apps.AppapiConfig',
+    'rest_framework',
 ]
 if DEBUG:
     INSTALLED_APPS+='whitenoise.runserver_nostatic',
@@ -91,14 +91,17 @@ DATABASES = {
         'ENGINE': os.environ.get("DB_ENGINE"),
         'NAME': os.environ.get("DB_NAME"),
         'HOST':os.environ.get("DB_HOST"),
-        "USER":os.environ.get("DB_USER"),
+        "USER":os.environ.get("DB_HOST"),
         "PASSWORD":os.environ.get("DB_PASSWORD"),
-        'OPTIONS': {
-            'sql_mode': 'traditional',
-        }
+        # 'OPTIONS': {
+        #     'sql_mode': 'traditional',
+            
+        # }
     }
 }
-
+REST_FRAMEWORK = {
+    "DEFAULT_PERMISSION_CLASSES":("rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly",),
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators

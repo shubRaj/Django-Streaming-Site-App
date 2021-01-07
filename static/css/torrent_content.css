@@ -17,6 +17,7 @@ table {
     border-collapse: collapse;
     margin: 1em;
     width: 100%;
+    overflow-x: auto;
 }
 
 th {
@@ -45,10 +46,10 @@ tbody tr:hover {
 }
 
 @media screen and (min-width: 1025px) {
-    .content-table,
+    /* .content-table,
     .pagination-table {
-        transform: translate(-24%, 0);
-    }
+        transform: translate(0%, 0);
+    } */
     .magnet-xm {
         text-align: center;
     }
