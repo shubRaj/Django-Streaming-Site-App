@@ -318,7 +318,7 @@ def basic_config(request):
                 "description":country[1],
                 "slug":country[1],
                 "url":"",
-                "image_url":"http://hdpop.xyz/shadow/uploads/default_image/country.png"
+                "image_url":"country.png"
             } for country in LANGUAGE_CHOICES
         ]
         basic_config = {
