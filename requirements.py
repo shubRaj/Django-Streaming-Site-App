@@ -1,0 +1,9 @@
+bs4
+Django==3.1.2
+django-multiselectfield==0.1.12
+django-user-agents==0.4.0
+Pillow==8.0.0
+requests==2.18.4
+urllib3==1.22
+whitenoise==5.2.0
+djangorestframework==3.12.2
