@@ -1,0 +1,7 @@
+Executable : /home/dynasty/Android/Sdk/cmake/3.10.2.4988404/bin/ninja
+arguments : 
+-C
+/home/dynasty/oxoo/Android Source Code/app/.cxx/cmake/debug/arm64-v8a
+api_config
+jvmArgs : 
+

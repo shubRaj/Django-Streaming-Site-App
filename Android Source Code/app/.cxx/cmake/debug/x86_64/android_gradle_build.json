@@ -1,0 +1,43 @@
+{
+  "stringTable": {
+    "0": "/home/dynasty/oxoo/Android Source Code/app/.cxx/cmake/debug/x86_64",
+    "1": "--target=x86_64-none-linux-android21 --gcc-toolchain=/home/dynasty/Android/Sdk/ndk/21.3.6528147/toolchains/llvm/prebuilt/linux-x86_64 --sysroot=/home/dynasty/Android/Sdk/ndk/21.3.6528147/toolchains/llvm/prebuilt/linux-x86_64/sysroot -Dapi_config_EXPORTS -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security -O0 -fno-limit-debug-info -fPIC"
+  },
+  "buildFiles": [
+    "/home/dynasty/oxoo/Android Source Code/app/src/main/jni/CMakeLists.txt",
+    "/home/dynasty/Android/Sdk/ndk/21.3.6528147/build/cmake/android.toolchain.cmake",
+    "/home/dynasty/Android/Sdk/ndk/21.3.6528147/build/cmake/platforms.cmake"
+  ],
+  "cleanCommands": [
+    "/home/dynasty/Android/Sdk/cmake/3.10.2.4988404/bin/ninja -C \"/home/dynasty/oxoo/Android Source Code/app/.cxx/cmake/debug/x86_64\" clean"
+  ],
+  "buildTargetsCommand": "/home/dynasty/Android/Sdk/cmake/3.10.2.4988404/bin/ninja  -C \"/home/dynasty/oxoo/Android Source Code/app/.cxx/cmake/debug/x86_64\" {LIST_OF_TARGETS_TO_BUILD}",
+  "libraries": {
+    "api_config-Debug-x86_64": {
+      "buildCommand": "/home/dynasty/Android/Sdk/cmake/3.10.2.4988404/bin/ninja -C \"/home/dynasty/oxoo/Android Source Code/app/.cxx/cmake/debug/x86_64\" api_config",
+      "buildType": "debug",
+      "toolchain": "3204490368",
+      "abi": "x86_64",
+      "artifactName": "api_config",
+      "files": [
+        {
+          "src": "/home/dynasty/oxoo/Android Source Code/app/src/main/jni/api_config.cpp",
+          "flagsOrdinal": 1,
+          "workingDirectoryOrdinal": 0
+        }
+      ],
+      "headers": [],
+      "output": "/home/dynasty/oxoo/Android Source Code/app/build/intermediates/cmake/debug/obj/x86_64/libapi_config.so",
+      "runtimeFiles": []
+    }
+  },
+  "toolchains": {
+    "3204490368": {
+      "cppCompilerExecutable": "/home/dynasty/Android/Sdk/ndk/21.3.6528147/toolchains/llvm/prebuilt/linux-x86_64/bin/clang++"
+    }
+  },
+  "cFileExtensions": [],
+  "cppFileExtensions": [
+    "cpp"
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "374227819919",
+    "project_id": "moviesquick-dynasty",
+    "storage_bucket": "moviesquick-dynasty.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:374227819919:android:87dc9fc4fa0216a7e67ffa",
+        "android_client_info": {
+          "package_name": "com.moviesquick.dynasty"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "374227819919-7270detn92lqeheusg77njorvpni6g1m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDtoJ68wkxhOl1YeTvUlOgIQhQlwZj28Jc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "374227819919-7270detn92lqeheusg77njorvpni6g1m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,5 @@
+# ninja log v5
+0	18806	1610013401	CMakeFiles/api_config.dir/api_config.cpp.o	d52bc6191290cf12
+18807	20178	1610013402	/home/dynasty/oxoo/Android Source Code/app/build/intermediates/cmake/debug/obj/arm64-v8a/libapi_config.so	6d1a4aefe556fe81
+1	6295	1610014179	CMakeFiles/api_config.dir/api_config.cpp.o	d52bc6191290cf12
+6295	6845	1610014179	/home/dynasty/oxoo/Android Source Code/app/build/intermediates/cmake/debug/obj/arm64-v8a/libapi_config.so	6d1a4aefe556fe81
