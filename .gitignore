@@ -1,3 +1,4 @@
+.gitignore
 db.sqlite3
 config.cfg
 movies_data.json
